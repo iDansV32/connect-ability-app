@@ -1,0 +1,113 @@
+{
+  "name": "connect-ability-agent-pack",
+  "version": "1.0.0",
+  "transport": {
+    "type": "http",
+    "baseUrl": "http://127.0.0.1:3030",
+    "auth": {
+      "type": "token",
+      "headers": ["Authorization", "X-API-Token"],
+      "env": "CONNECT_API_TOKEN"
+    }
+  },
+  "discovery": {
+    "health": "GET /api/health",
+    "functions": "GET /api/functions",
+    "schema": "GET /api/schema"
+  },
+  "invoke": {
+    "endpoint": "POST /api/call",
+    "body": {
+      "function": "string",
+      "args": []
+    }
+  },
+  "recipes": [
+    {
+      "id": "save_credentials",
+      "function": "saveCredentials",
+      "args": [
+        {
+          "email": "user@example.com",
+          "password": "secret"
+        }
+      ]
+    },
+    {
+      "id": "start_automation_query",
+      "function": "startAutomation",
+      "args": [
+        {
+          "searchType": "query",
+          "searchQuery": "SEO specialist",
+          "profileLimit": 10,
+          "visitProfile": true,
+          "likePosts": true,
+          "sendConnection": true,
+          "sendWithNote": true,
+          "connectMessage": "Hi {firstName}, I noticed your profile and would love to connect.",
+          "browserProfile": "random",
+          "headless": false,
+          "slowMo": 50
+        }
+      ]
+    },
+    {
+      "id": "publish_post_now",
+      "function": "publishLinkedInPost",
+      "args": [
+        {
+          "content": "Post content",
+          "sendType": "send-now",
+          "postType": "text"
+        }
+      ]
+    },
+    {
+      "id": "schedule_message",
+      "function": "scheduleMessage",
+      "args": [
+        {
+          "message": "Hi {firstName}, checking in.",
+          "profileIds": ["https://www.linkedin.com/in/example-profile/"],
+          "scheduledTime": "2026-02-15T18:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "run_group_workflow",
+      "function": "runGroupWorkflow",
+      "args": [
+        {
+          "groupId": "GROUP_ID",
+          "headless": false,
+          "slowMo": 100,
+          "steps": [
+            { "type": "view_profile", "minDelayMs": 8000, "maxDelayMs": 18000 },
+            { "type": "delay", "minDelayMs": 86400000, "maxDelayMs": 86400000 },
+            { "type": "like_posts", "minDelayMs": 8000, "maxDelayMs": 18000 },
+            { "type": "delay", "minDelayMs": 86400000, "maxDelayMs": 86400000 },
+            {
+              "type": "send_connection",
+              "messageTemplate": "Hi {firstName}, ...",
+              "minDelayMs": 8000,
+              "maxDelayMs": 18000
+            },
+            { "type": "delay", "minDelayMs": 86400000, "maxDelayMs": 86400000 },
+            {
+              "type": "send_dm",
+              "messageTemplate": "Hi {firstName}, ...",
+              "minDelayMs": 8000,
+              "maxDelayMs": 18000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scheduled_messages_list",
+      "function": "getScheduledMessages",
+      "args": []
+    }
+  ]
+}

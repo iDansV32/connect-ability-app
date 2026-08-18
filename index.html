@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect-Ability | LinkedIn Automation Tool</title>
+    
+    <!-- Styles are in the separate styles.css file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-background"></div>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" style="background: transparent; width: 320px; height: 75px;">
+                      <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stop-color="#0a66c2" />
+                          <stop offset="100%" stop-color="#00a0dc" />
+                        </linearGradient>
+                        <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#0a66c2" />
+                          <stop offset="80%" stop-color="#00a0dc" />
+                        </linearGradient>
+                      </defs>
+                      <g transform="translate(30, 75)">
+                        <g transform="translate(25, -15) scale(0.81)">
+                          <path d="M0,0 L60,30 L30,60 Z" fill="white" stroke="url(#iconGradient)" stroke-width="4" stroke-linejoin="round" />
+                          <path d="M60,30 C75,15 90,25 100,10 C110,-5 120,-10 130,-15" fill="none" stroke="url(#iconGradient)" stroke-width="3" stroke-linecap="round" />
+                          <path d="M15,15 L40,40" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                        </g>
+                        <text x="130" y="15" font-family="Arial, sans-serif" font-size="60" font-weight="700" fill="url(#textGradient)">Connect Ability</text>
+                        <text x="130" y="40" font-family="Arial, sans-serif" font-size="20" fill="#8898aa">LinkedIn Automation Tool</text>
+                      </g>
+                    </svg>
+                </div>
+                
+                <!-- Navigation links -->
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#config-section">Configuration</a>
+                    <a href="#how-it-works">How It Works</a>
+                </div>
+                
+                <!-- Action buttons -->
+                <div class="nav-right">
+                    <span id="app-version" class="version-badge"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="animated-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Automate Your LinkedIn Networking</h1>
+                <p>Connect with professionals in your industry, engage with content, and build meaningful relationships at scale - all while maintaining a human touch.</p>
+                <div class="hero-btns">
+                    <a href="#config-section" class="btn">Configure Your Automation</a>
+                    <a href="#how-it-works" class="btn btn-secondary">Learn How It Works</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Smart LinkedIn Automation</h2>
+                <p>Build your network effectively with our feature-rich automation tool</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon icon-1">🔍</div>
+                    <h3>Targeted Search</h3>
+                    <p>Find exactly the right professionals based on your custom search criteria and target industries or roles.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-2">👋</div>
+                    <h3>Personalized Connection Requests</h3>
+                    <p>Send connection requests with customized messages that include variables like first name for a personal touch.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-3">👍</div>
+                    <h3>Content Engagement</h3>
+                    <p>Automatically like and engage with your prospects' content to build relationships before connecting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Configuration Section -->
+    <section class="config-section" id="config-section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Configure Your Automation</h2>
+                <p>Customize how the tool will search, engage, and connect with your ideal prospects</p>
+            </div>
+            
+            <div class="config-container">
+                <!-- Left Panel - Configuration Options -->
+                <div class="config-panel">
+                    <h3>LinkedIn Automation Settings</h3>
+                    
+                    <form id="automation-form">
+                        <!-- LinkedIn Credentials -->
+                        <div class="form-group">
+                            <label for="linkedin-email">LinkedIn Email</label>
+                            <input type="text" id="linkedin-email" placeholder="your.email@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="linkedin-password">LinkedIn Password</label>
+                            <input type="password" id="linkedin-password" placeholder="Your password">
+                            <button type="button" id="save-credentials" class="credential-btn">Save Credentials</button>
+                        </div>
+                        
+                        <!-- Search Parameters -->
+                        <div class="form-group">
+                            <label for="search-query">Search Query</label>
+                            <input type="text" id="search-query" placeholder="e.g., SEO specialist, Marketing Manager" value="SEO specialist">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profile-limit">Number of Profiles to Process</label>
+                            <input type="number" id="profile-limit" min="1" max="100" value="10">
+                        </div>
+                        
+                        <!-- Engagement Options -->
+                        <div class="form-group">
+                            <label>Engagement Options</label>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="visit-profile" checked>
+                                <label for="visit-profile">Visit Profile</label>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="like-posts" checked>
+                                <label for="like-posts">Like Posts</label>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="send-connection" checked>
+                                <label for="send-connection">Send Connection Request</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Connection Message -->
+                        <div class="form-group">
+                            <label for="connect-message">Connection Message Template</label>
+                            <textarea id="connect-message" rows="4" placeholder="Your personalized connection message">Hi {firstName}, I noticed your profile and would love to connect. I'm working on some interesting projects in that field. Looking forward to sharing insights!</textarea>
+                            
+                            <div class="personalization-variables">
+                                <p>Available variables: <code>{firstName}</code></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Browser Settings -->
+                        <div class="form-group">
+                            <label for="browser-profile">Browser Profile</label>
+                            <select id="browser-profile">
+                                <option value="random">Random (Recommended)</option>
+                                <option value="windows">Windows Chrome</option>
+                                <option value="mac">Mac Chrome</option>
+                            </select>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="headless-mode">
+                            <label for="headless-mode">Run in Headless Mode (Hidden browser)</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="slow-mo">Slow Motion Factor (ms)</label>
+                            <input type="number" id="slow-mo" min="0" max="500" value="50" placeholder="e.g., 50">
+                            <small style="display: block; margin-top: 5px; color: var(--gray);">Higher values make automation appear more human-like but slower</small>
+                        </div>
+                        
+                        <!-- Run Controls -->
+                        <div class="run-controls">
+                            <button type="button" id="start-button" class="btn">Start Automation</button>
+                            <button type="button" id="stop-button" class="btn btn-secondary" disabled>Stop</button>
+                            <button type="button" id="clear-button" class="btn btn-secondary">Clear Terminal</button>
+                            <button type="button" id="export-button" class="btn btn-secondary">Export Logs</button>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-status">
+                                <span id="profiles-processed">0/0 profiles</span>
+                                <span id="time-elapsed">Time: 00:00</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Right Panel - Terminal Output -->
+                <div class="config-panel">
+                    <h3>Automation Console</h3>
+                    
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-title">LinkedIn Automation Log</div>
+                            <div class="terminal-controls">
+                                <span class="red"></span>
+                                <span class="yellow"></span>
+                                <span class="green"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="terminal-content" id="terminal-content">
+                            <div class="log-entry">
+                                <span class="log-time">[System]</span>
+                                <span class="log-message">LinkedIn Automation Console initialized. Ready to start.</span>
+                            </div>
+                            <div class="log-entry">
+                                <span class="log-time">[System]</span>
+                                <span class="log-message info">Configure the automation settings and click "Start Automation" to begin.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-heading">
+                <h2>How Connect Ability Works</h2>
+                <p>Our tool uses a sophisticated approach to automate LinkedIn networking while maintaining a natural, human-like presence</p>
+            </div>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Advanced Search</h3>
+                        <p>Connect Ability uses LinkedIn's search functionality to find professionals matching your specified criteria. The tool navigates through search results just like a human would, with natural scrolling and clicking patterns.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Engagement</h3>
+                        <p>Before sending connection requests, the tool can engage with your prospects' content. It visits their activity feed and likes their posts using natural mouse movements and timing variations to mimic human behavior.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Personalized Connection</h3>
+                        <p>Connect Ability sends personalized connection requests using your customized message template. It automatically replaces variables like {firstName} with the prospect's actual name to create truly personal outreach.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Analytics & Tracking</h3>
+                        <p>Every action is logged and tracked. The tool records which profiles were visited, which posts were liked, and which connection requests were sent, allowing you to measure your networking effectiveness.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">Connect Ability</div>
+                    <p>A powerful LinkedIn automation tool for building your professional network with a human touch.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Targeted Search</a></li>
+                        <li><a href="#features">Content Engagement</a></li>
+                        <li><a href="#features">Connection Requests</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="window.api.openExternal('https://github.com/your-username/connect-ability/wiki')">Documentation</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#" onclick="window.api.checkForUpdates()">Check for Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="window.api.openExternal('https://github.com/your-username/connect-ability/blob/main/LICENSE')">License</a></li>
+                        <li><a href="#" onclick="window.api.openExternal('https://github.com/your-username/connect-ability/blob/main/PRIVACY.md')">Privacy Policy</a></li>
+                        <li><a href="#" onclick="window.api.openExternal('https://github.com/your-username/connect-ability/blob/main/TERMS.md')">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">© 2025 Connect-Ability. All rights reserved.</div>
+                <div>
+                    <span id="app-version" class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Renderer script - handles UI interactions -->
+    <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+# ─── Secrets ─────────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*-credentials.json
+*-session.json
+
+# ─── Personal / machine-local config ─────────────────────────────────────
+# CLAUDE.md is the maintainer's local instructions for the Claude Code CLI;
+# .mcp.json points the MCP CLI at this machine's paths. Both are personal
+# and not portable — keep them out of the repo. See .mcp.example.json for
+# a template a tester can copy to .mcp.json.
+CLAUDE.md
+.mcp.json
+
+# Agent-tool local state. `.claude/settings.local.json` holds machine-local
+# permissions and `.claude/worktrees/` can contain a full second copy of the
+# repo — a reflexive `git add .` would commit both.
+.claude/
+.codex/
+
+# macOS launchd plists with hardcoded maintainer paths.
+scripts/com.*.plist
+
+# ─── Node / build outputs ────────────────────────────────────────────────
+# Note: we deliberately do NOT ignore `build/` — electron-builder reads
+# installer assets (build/icon.png, build/icon.ico, build/entitlements.mac.plist,
+# NSIS scripts, etc.) from that folder by convention. Add those when needed.
+node_modules/
+dist/
+release/
+out/
+.cache/
+.runtime/
+
+# ─── Demo / capture artifacts (may contain real prospect data) ──────────────
+exports/
+*.traineddata
+mcp-reel.html
+.parcel-cache/
+
+# ─── Logs ────────────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Runtime data + captures (regenerate locally; never commit) ──────────
+# Agent personas are per-install state: agent-persona-store.js reads and writes
+# `personas/<agentId>/` under the app directory, so anything committed here
+# would ship as a pre-made agent in a fresh clone. A clone must start with no
+# agents. The store mkdir's the directory on first write.
+personas/
+screenshots/
+profile-screenshots/
+sessions/
+profiles.json
+storage-state*.json
+
+# Loose error screenshots dropped at repo root
+error_connect_*.png
+connection-dialog.png
+
+# Loose ad-hoc temp files
+/tmp/
+tmp/
+*.tmp
+
+# ─── OS / editor cruft ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ─── Test artifacts ──────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+junit.xml
+
+# ─── Electron-builder cache ──────────────────────────────────────────────
+.electron-builder/
+electron-builder.env
+
+# ─── Unrelated scaffolding parked in this folder ─────────────────────────
+# Different project (Go-based "orion") that shares the directory. Not part
+# of this Electron app.
+.codex-orion-scaffold/
+.codex-orion-spec/
+.codex-orion-sync/
+
+# ─── Internal planning / strategy docs ───────────────────────────────────
+# Keep these out of the code repo. Move to a separate private doc store if
+# you want a developer tester to read them.
+LINKEDIN_2026_*.md
+LINKEDIN_PRIVATE_API_NOTES.md
+CROSS_CHANNEL_CAMPAIGN_*.md
+ENGINEERING_EXECUTION_PLAN.md
+SDR_AGENT_PRIORITY_TASK.md
+REDESIGN_HANDOFF.md
+OPENCLAW_AGENT.md
+OPENCLAW_API_CALLS.md

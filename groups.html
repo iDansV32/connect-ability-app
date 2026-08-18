@@ -1,0 +1,59 @@
+<!-- groups.html -->
+<section id="groups-section" class="app-section">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">Group Management</h2>
+      <button id="create-standalone-group-btn" class="btn btn-primary btn-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Create New Group
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="groups-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+        <!-- Groups will be loaded here -->
+        <div class="empty-state">
+          <p>No groups created yet. Create a group to organize your profiles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Group Modal -->
+  <div class="modal" id="standalone-group-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Group</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="standalone-group-form">
+          <div class="form-group">
+            <label for="standalone-group-name" class="form-label">Group Name</label>
+            <input type="text" id="standalone-group-name" class="form-control" placeholder="e.g., Marketing Leads">
+          </div>
+          <div class="form-group">
+            <label for="standalone-group-description" class="form-label">Description (Optional)</label>
+            <textarea id="standalone-group-description" class="form-control" placeholder="Brief description of this group"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Group Color</label>
+            <div class="color-options">
+              <div class="color-option selected" data-color="#4285F4" style="background-color: #4285F4;"></div>
+              <div class="color-option" data-color="#34A853" style="background-color: #34A853;"></div>
+              <div class="color-option" data-color="#FBBC05" style="background-color: #FBBC05;"></div>
+              <div class="color-option" data-color="#EA4335" style="background-color: #EA4335;"></div>
+              <div class="color-option" data-color="#9C27B0" style="background-color: #9C27B0;"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-standalone-group" class="btn btn-secondary">Cancel</button>
+        <button id="save-standalone-group" class="btn btn-primary">Create Group</button>
+      </div>
+    </div>
+  </div>
+</section>

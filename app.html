@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect-Ability | LinkedIn Automation Tool</title>
+  <script>
+    // Apply saved theme before any paint to prevent flash.
+    (function () {
+      try {
+        var t = localStorage.getItem('connect-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;550;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="cockpit.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar sidebar-v2" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-icon"><span class="material-symbols-outlined" style="font-size:18px;color:white;">hub</span></div>
+          <div class="logo-text">
+            <span class="logo-text-main">Connect</span>
+            <span class="logo-text-sub mono">workspace · ops</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Collapse sidebar">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <ul class="nav-items">
+          <li class="nav-item">
+            <a href="#" class="nav-link active" data-section="dashboard">
+              <div class="nav-icon"><span class="material-symbols-outlined">grid_view</span></div>
+              <span class="nav-text">Cockpit</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="inbox">
+              <div class="nav-icon"><span class="material-symbols-outlined">inbox</span></div>
+              <span class="nav-text">Inbox</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="automation">
+              <div class="nav-icon"><span class="material-symbols-outlined">search</span></div>
+              <span class="nav-text">Search &amp; Engage</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="automations">
+              <div class="nav-icon"><span class="material-symbols-outlined">account_tree</span></div>
+              <span class="nav-text">Automations</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="sdr-agents">
+              <div class="nav-icon"><span class="material-symbols-outlined">smart_toy</span></div>
+              <span class="nav-text">SDR Agents</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="post-scheduler">
+              <div class="nav-icon"><span class="material-symbols-outlined">calendar_month</span></div>
+              <span class="nav-text">Post Scheduler</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="message-scheduler">
+              <div class="nav-icon"><span class="material-symbols-outlined">chat_bubble</span></div>
+              <span class="nav-text">Message Scheduler</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="profiles">
+              <div class="nav-icon"><span class="material-symbols-outlined">group</span></div>
+              <span class="nav-text">Profiles</span>
+            </a>
+          </li>
+        </ul>
+        
+        <div class="nav-section-title">Configuration</div>
+        <ul class="nav-items">
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="settings">
+              <div class="nav-icon"><span class="material-symbols-outlined">settings</span></div>
+              <span class="nav-text">Settings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-section="credentials">
+              <div class="nav-icon"><span class="material-symbols-outlined">manage_accounts</span></div>
+              <span class="nav-text">Credentials</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="user-profile">
+        <div class="avatar">U</div>
+        <div class="user-info">
+          <div class="user-name">User</div>
+          <div class="user-email">user@example.com</div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="top-bar top-bar-v2">
+        <div class="top-bar-title">
+          <span class="top-bar-eyebrow mono" id="top-bar-eyebrow">Section</span>
+          <h1 class="page-title" id="page-title">Cockpit</h1>
+        </div>
+        <div class="top-bar-search" role="search">
+          <span class="material-symbols-outlined top-bar-search-icon">search</span>
+          <input type="search" id="top-bar-search-input" placeholder="Search prospects, agents, runs…" aria-label="Search" />
+          <span class="top-bar-kbd mono">⌘K</span>
+        </div>
+        <div class="top-bar-actions">
+          <div class="top-bar-health" id="top-bar-health" title="Account health">
+            <span class="health-dot health-dot--ok"></span><span class="mono" id="top-bar-health-ok">—</span>
+            <span class="health-dot health-dot--warn"></span><span class="mono" id="top-bar-health-warn">—</span>
+            <span class="health-dot health-dot--danger"></span><span class="mono" id="top-bar-health-danger">—</span>
+            <span class="top-bar-health-label mono">health</span>
+          </div>
+          <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle light / dark theme">
+            <span class="material-symbols-outlined theme-toggle-icon">dark_mode</span>
+          </button>
+          <div class="reply-notification-center" id="reply-notification-center">
+            <button type="button" id="reply-notification-toggle" class="reply-notification-toggle" aria-expanded="false" aria-controls="reply-notification-panel" aria-label="Open reply inbox">
+              <span class="material-symbols-outlined">notifications</span>
+              <span id="reply-notification-badge" class="reply-notification-badge is-hidden">0</span>
+            </button>
+            <div id="reply-notification-panel" class="reply-notification-panel" hidden>
+              <div class="reply-notification-panel-header">
+                <div>
+                  <div class="reply-notification-panel-title">Inbox</div>
+                  <div id="reply-notification-panel-meta" class="reply-notification-panel-meta">No reply conversations yet</div>
+                </div>
+                <button type="button" id="reply-notification-mark-all" class="btn btn-secondary btn-sm">Refresh</button>
+              </div>
+              <div class="reply-notification-panel-body">
+                <div id="reply-notification-list" class="reply-notification-list">
+                  <div class="reply-notification-empty">No reply conversations yet.</div>
+                </div>
+                <div id="reply-notification-detail" class="reply-notification-detail">
+                  <div class="reply-notification-detail-empty">Select a conversation to view the full thread.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="top-bar-account-switcher">
+            <div class="top-bar-account-copy">
+              <div class="top-bar-account-label">Active LinkedIn Profile</div>
+              <div id="topbar-linkedin-account-status" class="top-bar-account-status">No profile selected</div>
+            </div>
+            <select id="topbar-linkedin-account-select" class="form-control">
+              <option value="">No saved profiles</option>
+            </select>
+            <button type="button" id="manage-linkedin-accounts" class="btn btn-secondary btn-sm">Manage</button>
+          </div>
+        </div>
+      </div>
+      <div class="linkedin-runtime-strip">
+        <div id="linkedin-runtime-tabs" class="linkedin-runtime-tabs"></div>
+      </div>
+      
+      <div class="content-area">
+        <!-- Dashboard Section (Cockpit) -->
+        <section id="dashboard-section" class="app-section active cockpit">
+          <div class="cockpit__head">
+            <div>
+              <h1 class="page-title" id="cockpit-greeting">Good afternoon.</h1>
+              <p class="page-sub">
+                <span id="cockpit-status-line" class="s-dim">Ready</span>
+              </p>
+            </div>
+            <div class="row gap-2">
+              <div class="segmented" role="tablist" aria-label="Time range">
+                <button class="segmented__btn" type="button" data-range="today">Today</button>
+                <button class="segmented__btn segmented__btn--active" type="button" data-range="7d">7d</button>
+                <button class="segmented__btn" type="button" data-range="30d">30d</button>
+              </div>
+              <button id="export-diagnostics-report-btn" class="btn" type="button" title="Download diagnostics bundle">
+                <span class="material-symbols-outlined" style="font-size:14px">bolt</span> Diagnostics
+              </button>
+              <button id="export-activity-report-btn" class="btn btn--primary" type="button" title="Download activity report">
+                <span class="material-symbols-outlined" style="font-size:14px">analytics</span> Analytics
+              </button>
+            </div>
+          </div>
+
+          <div class="cockpit__grid">
+            <!-- KPIs (existing JS indexes .metric-card inside #dashboard-section) -->
+            <section class="kpis dashboard-kpi-row">
+              <div class="kpi metric-card">
+                <div class="kpi__head"><span class="eyebrow metric-title">Profiles Viewed</span><span class="kpi__delta metric-change mono">—</span></div>
+                <div class="metric-value-row"><span class="kpi__val metric-value tabular">—</span></div>
+                <div class="kpi__spark"><span class="kpi-spark-slot"></span><span class="eyebrow s-dim">last 12h</span></div>
+              </div>
+              <div class="kpi metric-card">
+                <div class="kpi__head"><span class="eyebrow metric-title">Connections Sent</span><span class="kpi__delta metric-change mono">—</span></div>
+                <div class="metric-value-row"><span class="kpi__val metric-value tabular">—</span></div>
+                <div class="kpi__spark"><span class="kpi-spark-slot"></span><span class="eyebrow s-dim">last 12h</span></div>
+              </div>
+              <div class="kpi metric-card">
+                <div class="kpi__head"><span class="eyebrow metric-title">Acceptance Rate</span><span class="kpi__delta metric-change mono">—</span></div>
+                <div class="metric-value-row"><span class="kpi__val metric-value tabular">—</span></div>
+                <div class="kpi__spark"><span class="kpi-spark-slot"></span><span class="eyebrow s-dim">last 12h</span></div>
+              </div>
+              <div class="kpi metric-card">
+                <div class="kpi__head"><span class="eyebrow metric-title">DM Reply Rate</span><span class="kpi__delta metric-change mono">—</span></div>
+                <div class="metric-value-row"><span class="kpi__val metric-value tabular">—</span></div>
+                <div class="kpi__spark"><span class="kpi-spark-slot"></span><span class="eyebrow s-dim">last 12h</span></div>
+              </div>
+              <div class="kpi metric-card metric-card-accent">
+                <div class="kpi__head"><span class="eyebrow metric-title">Unread Replies</span><span class="kpi__delta metric-change mono">—</span></div>
+                <div class="metric-value-row"><span class="kpi__val metric-value tabular">—</span><span class="metric-pulse"></span></div>
+                <div class="kpi__spark"><span class="kpi-spark-slot"></span><span class="eyebrow s-dim">last 12h</span></div>
+              </div>
+            </section>
+
+            <!-- Funnel (span 8) -->
+            <section class="card dashboard-funnel-card">
+              <div class="card__header">
+                <div class="row gap-2">
+                  <span class="card__title">Outreach funnel</span>
+                  <span class="chip chip--line mono">7d</span>
+                </div>
+              </div>
+              <div class="card__body" style="padding-top:10px;">
+                <div class="chart-container dashboard-funnel">
+                  <div class="funnel-placeholder">Loading pipeline data...</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Needs-you (span 4) -->
+            <section class="card dashboard-inbox-card">
+              <div class="card__header">
+                <span class="card__title">Needs you</span>
+                <span class="chip chip--line mono">Inbound</span>
+              </div>
+              <div class="dashboard-inbox-list">
+                <div class="needs"><div class="needs__empty">Loading replies…</div></div>
+              </div>
+            </section>
+
+            <!-- Account health (span 7) -->
+            <section class="card span-2 dashboard-health-card">
+              <div class="card__header">
+                <div class="row gap-2">
+                  <span class="card__title">Account health</span>
+                  <span class="mono s-dim" id="cockpit-health-meta">—</span>
+                </div>
+              </div>
+              <div class="ahrow ahrow--head">
+                <div class="eyebrow">Agent</div>
+                <div class="eyebrow">Replies</div>
+                <div class="eyebrow">Connections</div>
+                <div class="eyebrow">Views</div>
+                <div class="eyebrow" style="text-align:right">Total</div>
+              </div>
+              <div class="ahlist dashboard-health-list">
+                <div class="needs__empty">Loading health data…</div>
+              </div>
+            </section>
+
+            <!-- Active runs (span 5) -->
+            <section class="card dashboard-runs-card">
+              <div class="card__header">
+                <span class="card__title">Active runs</span>
+                <button class="btn btn--ghost btn--sm" type="button">All →</button>
+              </div>
+              <div class="activity-feed">
+                <div class="runs"><div class="needs__empty">Loading workflow data…</div></div>
+              </div>
+            </section>
+          </div>
+          <!-- Group Edit Modal -->
+<div class="modal group-edit-modal" id="group-edit-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Edit Group: <span id="group-edit-name">Liked</span></h2>
+      <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="group-edit-actions">
+        <div class="search-container">
+          <input 
+            type="text" 
+            id="profile-search" 
+            placeholder="Search profiles..."
+            class="search-input"
+          >
+          <button class="search-clear">×</button>
+        </div>
+        
+        <div class="bulk-actions">
+          <label class="checkbox-container">
+            <input 
+              type="checkbox" 
+              id="select-all-profiles"
+            >
+            Select All
+          </label>
+          <div class="action-buttons">
+            <button class="btn btn-secondary" id="remove-selected">
+              Remove Selected
+            </button>
+            <button class="btn btn-primary" id="add-profiles">
+              Add Profiles
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="profiles-list" id="group-profiles-list">
+        <!-- Dynamically populated profiles will go here -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="cancel-group-edit">Cancel</button>
+      <button class="btn btn-primary" id="save-group-edit">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Profiles Modal -->
+<div class="modal add-profiles-modal" id="add-profiles-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Profiles to Group</h2>
+      <button class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="add-profile-search" 
+          placeholder="Search all profiles..."
+          class="search-input"
+        >
+      </div>
+      <div class="profiles-list" id="available-profiles-list">
+        <!-- Dynamically populated available profiles -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="cancel-add-profiles">Cancel</button>
+      <button class="btn btn-primary" id="confirm-add-profiles">Add Profiles</button>
+    </div>
+  </div>
+</div>
+        </section>
+
+        <!-- Unified Inbox Section -->
+        <section id="inbox-section" class="app-section">
+          <div class="inbox-triple-panel">
+            <!-- LEFT: Triage List -->
+            <section class="inbox-panel-left">
+              <div class="inbox-triage-header">
+                <h1 class="sdr-panel-title">Unified Inbox</h1>
+                <div class="inbox-filter-tabs">
+                  <button class="inbox-filter-tab active" data-inbox-filter="all">All</button>
+                  <button class="inbox-filter-tab" data-inbox-filter="unread">Unread</button>
+                  <button class="inbox-filter-tab" data-inbox-filter="priority">Priority</button>
+                </div>
+              </div>
+              <div id="inbox-conversation-list" class="inbox-conversation-list">
+                <!-- JS populates conversation rows -->
+                <div class="inbox-empty">No conversations yet.</div>
+              </div>
+            </section>
+
+            <!-- CENTER: Thread View -->
+            <section class="inbox-panel-center">
+              <div class="inbox-thread-header" id="inbox-thread-header">
+                <div class="inbox-thread-meta">Select a conversation</div>
+              </div>
+              <div id="inbox-thread-messages" class="inbox-thread-messages">
+                <!-- JS populates message bubbles -->
+              </div>
+              <div class="inbox-composer" id="inbox-composer">
+                <div class="inbox-composer-inner">
+                  <textarea id="inbox-reply-text" class="inbox-reply-textarea" placeholder="Write a reply..." spellcheck="false"></textarea>
+                  <div class="inbox-composer-actions">
+                    <div class="inbox-composer-tools">
+                      <button type="button" class="btn btn-secondary btn-sm"><span class="material-symbols-outlined" style="font-size:14px">library_books</span> Template</button>
+                      <button type="button" class="btn btn-secondary btn-sm"><span class="material-symbols-outlined" style="font-size:14px">calendar_today</span> Calendar</button>
+                    </div>
+                    <button type="button" id="inbox-send-reply" class="btn btn-primary">
+                      Send <span class="material-symbols-outlined" style="font-size:16px">send</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- RIGHT: Operator Intelligence -->
+            <aside class="inbox-panel-right">
+              <div class="sdr-intel-header" style="margin-bottom:16px">
+                <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">monitoring</span>
+                <h2 class="sdr-panel-title">Operator Intelligence</h2>
+              </div>
+
+              <div id="inbox-prospect-info" class="inbox-intel-card">
+                <div class="inbox-intel-label">Account</div>
+                <div class="inbox-intel-value">Select a conversation</div>
+              </div>
+
+              <div id="inbox-linked-workflow" class="inbox-intel-card" style="margin-top:16px">
+                <div class="inbox-intel-label">Linked Workflow</div>
+                <div class="inbox-intel-value">None</div>
+              </div>
+
+              <div id="inbox-recent-actions" class="inbox-intel-section" style="margin-top:24px">
+                <div class="inbox-intel-label">Recent Actions</div>
+                <!-- JS populates action timeline -->
+              </div>
+
+              <div class="inbox-actions" style="margin-top:24px">
+                <button type="button" id="inbox-pause-workflow" class="btn btn-secondary" style="width:100%;margin-bottom:8px">
+                  <span class="material-symbols-outlined" style="font-size:16px">pause_circle</span> Pause Workflow
+                </button>
+                <button type="button" id="inbox-open-profile" class="btn btn-secondary" style="width:100%;margin-bottom:8px">
+                  <span class="material-symbols-outlined" style="font-size:16px">person</span> Open Profile
+                </button>
+                <button type="button" id="inbox-archive" class="btn btn-secondary" style="width:100%">
+                  <span class="material-symbols-outlined" style="font-size:16px">archive</span> Archive
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Post Scheduler Section -->
+        <section id="post-scheduler-section" class="app-section">
+          <div class="post-scheduler-section">
+            <!-- Header -->
+            <div class="scheduler-header">
+              <h1 class="scheduler-title">Post Scheduler</h1>
+              <div class="scheduler-actions">
+                <button id="import-posts-btn" class="btn btn-secondary">
+                  <span class="material-symbols-outlined" style="font-size:14px">upload_file</span> Import
+                </button>
+                <button id="export-posts-btn" class="btn btn-secondary">
+                  <span class="material-symbols-outlined" style="font-size:14px">download</span> Export
+                </button>
+              </div>
+            </div>
+
+            <!-- Post Creation Form -->
+            <div class="post-creator">
+              <form id="create-post-form">
+                <div class="form-section">
+                  <label for="post-content" class="form-label">Post Content</label>
+                  <textarea id="post-content" name="content" class="form-control post-textarea" placeholder="Type your message or post here..." required></textarea>
+                  <div id="character-counter" class="character-counter">0/3000</div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="scheduled-date" class="form-label">Scheduled Date</label>
+                    <input type="date" id="scheduled-date" name="scheduledDate" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="scheduled-time" class="form-label">Scheduled Time</label>
+                    <input type="time" id="scheduled-time" name="scheduledTime" class="form-control">
+                  </div>
+                </div>
+
+                <div id="schedule-warning" class="schedule-warning" style="display: none;"></div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Action Type</label>
+                    <div class="radio-group" style="display:flex;gap:16px;margin-top:6px">
+                      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+                        <input type="radio" id="send-now" name="send-type" value="send-now" checked> Send Now
+                      </label>
+                      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+                        <input type="radio" id="schedule-post" name="send-type" value="schedule-post"> Schedule
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="post-type" class="form-label">Post Type</label>
+                    <select id="post-type" name="postType" class="form-control" disabled>
+                      <option value="text">Text Only</option>
+                      <option value="image">With Image</option>
+                    </select>
+                  </div>
+                </div>
+
+                <label class="checkbox-group" style="margin-top:12px">
+                  <input type="checkbox" id="include-image" name="includeImage" class="checkbox-input" disabled>
+                  <span class="checkbox-label">Include image attachment</span>
+                </label>
+
+                <div class="form-actions">
+                  <button type="button" id="preview-post-btn" class="btn btn-secondary">
+                    <span class="material-symbols-outlined" style="font-size:14px">visibility</span> Preview
+                  </button>
+                  <button type="submit" id="schedule-post-btn" class="btn btn-primary">
+                    <span class="material-symbols-outlined" style="font-size:14px">send</span> Publish / Schedule
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Scheduled Posts List -->
+            <div class="scheduled-posts">
+              <div class="posts-header">
+                <h2 class="posts-title">Scheduled Posts</h2>
+                <div class="posts-stats"><span id="posts-count">0 posts</span></div>
+              </div>
+              <div class="posts-list" id="scheduled-posts-list">
+                <div class="inbox-empty"><p>No scheduled posts yet.</p></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <script src="post-scheduler.js"></script>
+        
+        <!-- Search & Engage Section -->
+        <section id="automation-section" class="app-section">
+  <div class="card">
+      <div class="card-header">
+          <h2 class="card-title">Search &amp; Engage</h2>
+      </div>
+      <div class="card-body">
+          <form id="automation-form">
+              <div class="search-engage-banner">
+                  <div class="search-engage-banner-title">Search-based outreach</div>
+                  <div class="hint-text">
+                      Use this section for keyword or name-list searches plus a simple engagement pass. Saved multi-step workflows now live under <strong>Automations</strong>.
+                  </div>
+              </div>
+
+              <div id="search-mode" class="automation-mode-content active">
+                  <div class="search-mode-content">
+                      <div class="search-config">
+                          <div class="config-title">Search Configuration</div>
+
+                          <div class="form-group">
+                              <label for="search-agent-select" class="form-label">SDR Agent</label>
+                              <select id="search-agent-select" class="form-control">
+                                  <option value="">No SDR agent preset</option>
+                              </select>
+                              <div class="hint-text">
+                                  Load saved persona searches and use the agent's assigned LinkedIn account.
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label for="search-agent-preset" class="form-label">Saved Search Preset</label>
+                              <select id="search-agent-preset" class="form-control">
+                                  <option value="">Select a saved search...</option>
+                              </select>
+                              <div id="search-agent-preset-summary" class="hint-text">
+                                  Choose an SDR agent to load generated search presets.
+                              </div>
+                          </div>
+                          
+                          <div class="form-group">
+                              <label class="form-label">Search Type</label>
+                              <div class="radio-group">
+                                  <input type="radio" id="search-type-query" name="search-type" value="query" class="radio-input" checked>
+                                  <label for="search-type-query" class="radio-label">Search by Keywords</label>
+                              </div>
+                              <div class="radio-group">
+                                  <input type="radio" id="search-type-names" name="search-type" value="names" class="radio-input">
+                                  <label for="search-type-names" class="radio-label">Search by Name List</label>
+                              </div>
+                          </div>
+
+                          <!-- Keyword Search -->
+                          <div id="keyword-search-section">
+                              <div class="form-group">
+                                  <label for="search-query" class="form-label">Search Query</label>
+                                  <input type="text" id="search-query" class="form-control" placeholder="e.g., SEO specialist, Marketing Manager" value="SEO specialist">
+                              </div>
+                              
+                              <div class="form-group">
+                                  <label for="automation-group-select" class="form-label">Filter by Group</label>
+                                  <select id="automation-group-select" class="form-control">
+                                      <option value="">All Profiles</option>
+                                  </select>
+                                  <div class="hint-text">
+                                      Select a specific group to limit automation to its members.
+                                  </div>
+                              </div>
+                              
+                              <div class="form-group">
+                                  <label for="profile-limit" class="form-label">Number of Profiles to Process</label>
+                                  <input type="number" id="profile-limit" class="form-control" min="1" max="100" value="10">
+                              </div>
+                          </div>
+
+                          <!-- Name List Search -->
+                          <div id="name-search-section" style="display: none;">
+                              <div class="form-group">
+                                  <label for="name-list" class="form-label">List of Names</label>
+                                  <textarea id="name-list" class="form-control name-list-textarea" rows="6" placeholder="Enter names, one per line or separated by commas:&#10;&#10;John Smith&#10;Jane Doe&#10;Michael Johnson&#10;Sarah Wilson"></textarea>
+                                  <div class="hint-text">
+                                      Enter one name per line, or separate with commas.
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="engagement-config workflow-builder-panel">
+                          <div class="config-title">Engagement Actions</div>
+                          <div class="workflow-builder-subtitle">
+                              Configure the simple actions you want to run on the results from this search.
+                          </div>
+
+                          <div class="workflow-action-library">
+                              <button type="button" class="workflow-action-chip" data-action-card="visit-profile">
+                                  + Visit Profile
+                              </button>
+                              <button type="button" class="workflow-action-chip" data-action-card="like-posts">
+                                  + Like Posts
+                              </button>
+                              <button type="button" class="workflow-action-chip" data-action-card="send-connection">
+                                  + Send Connection
+                              </button>
+                          </div>
+
+                          <div class="workflow-selected-summary" id="workflow-action-summary">
+                              <div class="workflow-summary-title">Selected Engagement</div>
+                              <div class="workflow-summary-empty">No actions selected yet.</div>
+                          </div>
+
+                          <div class="workflow-action-card" data-action="visit-profile">
+                              <div class="workflow-action-card-header">
+                                  <label class="checkbox-group">
+                                      <input type="checkbox" id="visit-profile" class="checkbox-input" checked>
+                                      <span class="checkbox-label">Visit Profile</span>
+                                  </label>
+                                  <div class="workflow-action-card-controls">
+                                      <button type="button" class="workflow-card-toggle" data-target-action="visit-profile">Configure</button>
+                                      <button type="button" class="workflow-card-remove" data-remove-action="visit-profile">Remove</button>
+                                  </div>
+                              </div>
+                              <div class="workflow-action-card-body">
+                                  <div class="hint-text">Open profile pages and gather profile context before any other action.</div>
+                              </div>
+                          </div>
+
+                          <div class="workflow-action-card" data-action="like-posts">
+                              <div class="workflow-action-card-header">
+                                  <label class="checkbox-group">
+                                      <input type="checkbox" id="like-posts" class="checkbox-input" checked>
+                                      <span class="checkbox-label">Like Posts</span>
+                                  </label>
+                                  <div class="workflow-action-card-controls">
+                                      <button type="button" class="workflow-card-toggle" data-target-action="like-posts">Configure</button>
+                                      <button type="button" class="workflow-card-remove" data-remove-action="like-posts">Remove</button>
+                                  </div>
+                              </div>
+                              <div class="workflow-action-card-body">
+                                  <div class="hint-text">Like recent content to warm up engagement before sending requests.</div>
+                              </div>
+                          </div>
+
+                          <div class="workflow-action-card" data-action="send-connection">
+                              <div class="workflow-action-card-header">
+                                  <label class="checkbox-group">
+                                      <input type="checkbox" id="send-connection" class="checkbox-input" checked>
+                                      <span class="checkbox-label">Send Connection Request</span>
+                                  </label>
+                                  <div class="workflow-action-card-controls">
+                                      <button type="button" class="workflow-card-toggle" data-target-action="send-connection">Configure</button>
+                                      <button type="button" class="workflow-card-remove" data-remove-action="send-connection">Remove</button>
+                                  </div>
+                              </div>
+
+                              <div id="connection-options" class="connection-options workflow-action-card-body">
+                                  <div class="radio-group">
+                                      <input type="radio" id="with-note" name="connection-type" class="radio-input" checked>
+                                      <label for="with-note" class="radio-label">Send with personalized note</label>
+                                  </div>
+                                  <div class="radio-group">
+                                      <input type="radio" id="without-note" name="connection-type" class="radio-input">
+                                      <label for="without-note" class="radio-label">Send without note (faster)</label>
+                                  </div>
+                                  
+                                  <div class="form-group" id="connect-message-group">
+                                      <label for="connect-message" class="form-label">Connection Message Template</label>
+                                      <textarea id="connect-message" class="form-control" rows="3" placeholder="Your personalized connection message">Hi {firstName}, I noticed your profile and would love to connect. Looking forward to sharing insights!</textarea>
+                                      <div class="hint-text">Available variables: <code>{firstName}</code>, <code>{lastName}</code>, <code>{company}</code></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="common-settings">
+                  <div class="config-title">Automation Settings</div>
+
+                  <div class="checkbox-group">
+                      <input type="checkbox" id="headless-mode" class="checkbox-input">
+                      <label for="headless-mode" class="checkbox-label">Run Browserless (no visible browser window)</label>
+                  </div>
+                  
+                  <div class="btn-group">
+                      <button type="button" id="start-button" class="btn btn-primary js-legacy-direct-login" title="Legacy direct-login automation. Set CONNECT_ALLOW_LEGACY_DIRECT_LOGIN=renderer-ui to show this control.">Start Automation</button>
+                      <button type="button" id="stop-button" class="btn btn-secondary" disabled>Stop</button>
+                      <button type="button" id="clear-button" class="btn btn-secondary">Clear Terminal</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+  
+  <div class="card">
+      <div class="card-header">
+          <h2 class="card-title">Automation Console</h2>
+          <button id="export-button" class="btn btn-secondary btn-sm">Export Logs</button>
+      </div>
+      <div class="card-body">
+          <div class="terminal">
+              <div class="terminal-header">
+                  <div class="terminal-title">LinkedIn Automation Log</div>
+                  <div class="terminal-controls">
+                      <div class="terminal-control red"></div>
+                      <div class="terminal-control yellow"></div>
+                      <div class="terminal-control green"></div>
+                  </div>
+              </div>
+              <div class="terminal-content" id="terminal-content">
+                  <div class="log-entry">
+                      <span class="log-time">[System]</span>
+                      <span class="log-message">LinkedIn Automation Console initialized. Ready to start.</span>
+                  </div>
+                  <div class="log-entry">
+                      <span class="log-time">[System]</span>
+                      <span class="log-message info">Configure the automation settings and click "Start Automation" to begin.</span>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="progress-container" id="progress-container" style="display: none;">
+              <div class="progress-bar">
+                  <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="progress-stats">
+                  <span id="profiles-processed">0/0 profiles</span>
+                  <span id="time-elapsed">Time: 00:00</span>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<section id="automations-section" class="app-section">
+  <div class="wf-triple-panel">
+    <!-- LEFT PANEL: Targeting -->
+    <section class="wf-panel-left">
+      <div class="wf-panel-section">
+        <div class="sdr-section-label">
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">filter_list</span>
+          <span>Targeting Engine</span>
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px">
+          <label for="automation-workflow-agent" class="form-label">SDR Agent</label>
+          <select id="automation-workflow-agent" class="form-control">
+            <option value="">No SDR agent assigned</option>
+          </select>
+        </div>
+
+        <!-- Target Tabs -->
+        <div class="automation-target-tabs">
+          <button type="button" class="automation-target-tab active" data-target-mode="group">Group</button>
+          <button type="button" class="automation-target-tab" data-target-mode="profiles">Profiles</button>
+          <button type="button" class="automation-target-tab" data-target-mode="manual">Names</button>
+        </div>
+
+        <!-- Group Target -->
+        <div class="automation-target-content active" id="automation-target-group">
+          <label for="automation-workflow-group" class="form-label">Select Group</label>
+          <div class="automation-group-select-row">
+            <select id="automation-workflow-group" class="form-control">
+              <option value="">Choose a group...</option>
+            </select>
+            <button type="button" id="automation-group-refresh" class="btn btn-secondary btn-sm">
+              <span class="material-symbols-outlined" style="font-size:14px">refresh</span>
+            </button>
+            <button type="button" id="automation-group-create-toggle" class="btn btn-secondary btn-sm">New</button>
+          </div>
+
+          <div id="automation-group-create-panel" class="automation-group-create-panel">
+            <div class="form-group">
+              <label for="automation-group-name" class="form-label">Group Name</label>
+              <input type="text" id="automation-group-name" class="form-control" placeholder="Customer Success Prospects">
+            </div>
+            <div class="form-group">
+              <label for="automation-group-description" class="form-label">Description</label>
+              <input type="text" id="automation-group-description" class="form-control" placeholder="Optional description">
+            </div>
+            <div class="form-group">
+              <label for="automation-group-profile-search" class="form-label">Add Profiles</label>
+              <input type="text" id="automation-group-profile-search" class="form-control" placeholder="Search profiles...">
+            </div>
+            <div id="automation-group-profile-list" class="automation-profile-list"></div>
+            <div class="wf-group-actions">
+              <button type="button" id="automation-group-save" class="btn btn-primary btn-sm">Save Group</button>
+              <button type="button" id="automation-group-create-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profiles Target -->
+        <div class="automation-target-content" id="automation-target-profiles">
+          <label for="automation-workflow-profile-search" class="form-label">Select Stored Profiles</label>
+          <input type="text" id="automation-workflow-profile-search" class="form-control" placeholder="Search profiles...">
+          <div id="automation-workflow-profile-list" class="automation-profile-list"></div>
+        </div>
+
+        <!-- Manual Target -->
+        <div class="automation-target-content" id="automation-target-manual">
+          <label for="automation-workflow-manual-names" class="form-label">Name List</label>
+          <textarea id="automation-workflow-manual-names" class="form-control sdr-mono-textarea" rows="6" placeholder="Ivan Dans&#10;Jane Smith&#10;John Doe"></textarea>
+        </div>
+
+        <!-- Target Summary -->
+        <div class="wf-target-summary-area">
+          <div id="automation-workflow-target-summary" class="wf-target-summary">No target selected yet.</div>
+        </div>
+      </div>
+
+      <!-- Automation Logic -->
+      <div class="wf-panel-section">
+        <div class="sdr-section-label">
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--on-surface-variant)">tune</span>
+          <span>Automation Logic</span>
+        </div>
+        <label class="checkbox-group">
+          <input type="checkbox" id="automation-workflow-headless" class="checkbox-input">
+          <span class="checkbox-label">Run Browserless</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- CENTER PANEL: Step Editor Canvas -->
+    <section class="wf-panel-center">
+      <!-- Workflow Header -->
+      <div class="wf-editor-header">
+        <div>
+          <input type="text" id="automation-workflow-name" class="wf-name-input" placeholder="Untitled Workflow">
+          <input type="text" id="automation-workflow-description" class="wf-desc-input" placeholder="Optional notes...">
+        </div>
+        <div class="wf-editor-actions">
+          <button type="button" id="automation-workflow-reset" class="btn btn-secondary">Discard</button>
+          <button type="button" id="automation-workflow-stop" class="btn btn-secondary" disabled>Stop</button>
+          <button type="button" id="automation-workflow-save" class="btn btn-secondary">Save</button>
+          <button type="button" id="automation-workflow-run" class="btn btn-primary">Launch Workflow</button>
+        </div>
+      </div>
+
+      <!-- Step Library -->
+      <div class="wf-step-library">
+        <button type="button" class="automation-step-library-item" data-step-type="view_profile">
+          <span class="material-symbols-outlined" style="font-size:16px">visibility</span> View Profile
+        </button>
+        <button type="button" class="automation-step-library-item" data-step-type="like_posts">
+          <span class="material-symbols-outlined" style="font-size:16px">thumb_up</span> Like Posts
+        </button>
+        <button type="button" class="automation-step-library-item" data-step-type="send_connection">
+          <span class="material-symbols-outlined" style="font-size:16px">person_add</span> Connect
+        </button>
+        <button type="button" class="automation-step-library-item" data-step-type="send_dm">
+          <span class="material-symbols-outlined" style="font-size:16px">send</span> Send DM
+        </button>
+        <button type="button" class="automation-step-library-item" data-step-type="delay">
+          <span class="material-symbols-outlined" style="font-size:16px">schedule</span> Delay
+        </button>
+      </div>
+
+      <!-- Step Canvas -->
+      <div id="automation-workflow-steps-container" class="wf-step-canvas step-list">
+        <div class="empty-steps">
+          <span class="material-symbols-outlined" style="font-size:32px;color:var(--outline-variant);margin-bottom:8px">add_circle</span>
+          <div>Click a step type above to begin building your sequence.</div>
+        </div>
+      </div>
+
+      <button type="button" id="automation-workflow-add-step" class="wf-add-step-btn">
+        <span class="material-symbols-outlined" style="font-size:16px">add_circle</span> Add Next Step
+      </button>
+
+      <!-- Workflow Status -->
+      <div id="automation-workflow-status" class="wf-status-bar">
+        Draft workflow. Select targets, add steps, then save or run it.
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Validation & Library -->
+    <aside class="wf-panel-right">
+      <!-- Saved Workflows Library -->
+      <div class="sdr-intel-section">
+        <div class="sdr-intel-header">
+          <h2 class="sdr-panel-title">Saved Workflows</h2>
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--on-surface-variant)">folder</span>
+        </div>
+        <div id="automation-workflow-library" class="automation-workflow-library">
+          <div class="wf-empty-library">No saved workflows yet.</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+<section id="sdr-agents-section" class="app-section">
+  <!-- Triple Panel Layout -->
+  <div class="sdr-triple-panel">
+    <!-- LEFT PANEL: Agent List -->
+    <aside class="sdr-panel-left">
+      <div class="sdr-panel-header">
+        <h2 class="sdr-panel-title">Saved Agents</h2>
+        <button type="button" id="sdr-agent-new" class="sdr-add-btn">
+          <span class="material-symbols-outlined" style="font-size:18px">add_circle</span>
+        </button>
+      </div>
+      <div id="sdr-agent-list" class="sdr-agent-list"></div>
+    </aside>
+
+    <!-- CENTER PANEL: Agent Configuration -->
+    <section class="sdr-panel-center">
+      <div class="sdr-agent-editor-panel">
+        <!-- Agent Profile Form -->
+        <form id="sdr-agent-form" class="sdr-agent-form">
+          <input type="hidden" id="sdr-agent-id">
+
+          <!-- Header with actions -->
+          <div class="sdr-editor-header">
+            <div>
+              <h1 class="sdr-editor-title" id="sdr-editor-title-display">New Agent</h1>
+              <div id="sdr-agent-feedback" class="sdr-editor-subtitle">Create an SDR agent, tie it to a LinkedIn profile, and reuse it in Automations.</div>
+            </div>
+            <div class="sdr-editor-actions">
+              <button type="button" id="sdr-agent-reset" class="btn btn-secondary">Discard</button>
+              <button type="button" id="sdr-agent-delete" class="btn btn-secondary">Delete</button>
+              <button type="submit" class="btn btn-primary">Deploy Agent</button>
+            </div>
+          </div>
+
+          <!-- Profile Fields -->
+          <div class="sdr-agent-grid">
+            <div class="form-group">
+              <label for="sdr-agent-name" class="form-label">Agent Name</label>
+              <input type="text" id="sdr-agent-name" class="form-control" placeholder="Customer Success SDR">
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-account" class="form-label">Primary Account</label>
+              <select id="sdr-agent-account" class="form-control">
+                <option value="">Select a LinkedIn profile...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-niche" class="form-label">Target Niche</label>
+              <input type="text" id="sdr-agent-niche" class="form-control" placeholder="Customer success leaders in SaaS">
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-status" class="form-label">Operational Status</label>
+              <select id="sdr-agent-status" class="form-control">
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="draft">Draft</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Targeting Section -->
+          <div class="sdr-config-section">
+            <div class="sdr-section-label">
+              <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">target</span>
+              <span>Targeting Logic</span>
+            </div>
+            <div class="sdr-agent-grid">
+              <div class="form-group">
+                <label for="sdr-agent-persona-titles" class="form-label">Target Titles (one per line)</label>
+                <textarea id="sdr-agent-persona-titles" class="form-control sdr-mono-textarea" rows="4" placeholder="Chief of Staff&#10;Head of People&#10;VP People"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="sdr-agent-search-keywords" class="form-label">Search Keywords</label>
+                <textarea id="sdr-agent-search-keywords" class="form-control sdr-mono-textarea" rows="4" placeholder="customer success&#10;people ops&#10;founder-led saas"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-content-pillars" class="form-label">Content Pillars</label>
+              <textarea id="sdr-agent-content-pillars" class="form-control" rows="2" placeholder="customer success&#10;retention&#10;revenue expansion"></textarea>
+            </div>
+          </div>
+
+          <!-- Messaging Section -->
+          <div class="sdr-config-section">
+            <div class="sdr-section-label">
+              <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">forum</span>
+              <span>Messaging Templates</span>
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-connection-note" class="form-label">Connection Note</label>
+              <textarea id="sdr-agent-connection-note" class="form-control" rows="3" placeholder="Hi {firstName}, would love to connect."></textarea>
+            </div>
+            <div class="sdr-agent-grid">
+              <div class="form-group sdr-template-card">
+                <div class="sdr-template-header">
+                  <label for="sdr-agent-dm-primary" class="form-label">Primary DM (Initial Touch)</label>
+                  <span class="sdr-template-badge sdr-badge-primary">A/B VARIANT</span>
+                </div>
+                <textarea id="sdr-agent-dm-primary" class="form-control" rows="4" placeholder="Hi {firstName}, reaching out because..."></textarea>
+              </div>
+              <div class="form-group sdr-template-card">
+                <div class="sdr-template-header">
+                  <label for="sdr-agent-dm-follow-up" class="form-label">Follow-up Template</label>
+                  <span class="sdr-template-badge sdr-badge-secondary">SEQUENTIAL</span>
+                </div>
+                <textarea id="sdr-agent-dm-follow-up" class="form-control" rows="4" placeholder="Quick follow up, {firstName}..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="sdr-agent-grid sdr-agent-preferences">
+            <div class="form-group">
+              <label for="sdr-agent-post-cadence" class="form-label">Post Cadence</label>
+              <select id="sdr-agent-post-cadence" class="form-control">
+                <option value="daily">Daily</option>
+                <option value="weekdays">Weekdays</option>
+                <option value="three_per_week">3x per week</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sdr-agent-timezone" class="form-label">Timezone</label>
+              <input type="text" id="sdr-agent-timezone" class="form-control" value="America/Chicago">
+            </div>
+          </div>
+
+          <div class="sdr-agent-checkboxes">
+            <label class="checkbox-group">
+              <input type="checkbox" id="sdr-agent-notify-dm" class="checkbox-input" checked>
+              <span class="checkbox-label">Notify on DM replies</span>
+            </label>
+            <label class="checkbox-group">
+              <input type="checkbox" id="sdr-agent-notify-failures" class="checkbox-input" checked>
+              <span class="checkbox-label">Notify on workflow failures</span>
+            </label>
+          </div>
+        </form>
+
+        <!-- Search Presets -->
+        <div class="sdr-config-section">
+          <div class="sdr-section-label">
+            <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">manage_search</span>
+            <span>Generated Search Presets</span>
+          </div>
+          <div id="sdr-agent-search-presets" class="sdr-agent-search-presets">
+            <div class="hint-text">Select an SDR agent to generate saved persona searches.</div>
+          </div>
+        </div>
+
+        <!-- Content Planner -->
+        <div class="sdr-config-section">
+          <div class="sdr-section-label">
+            <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">calendar_month</span>
+            <span>90-Day Content Planner</span>
+          </div>
+          <div class="sdr-agent-plan-controls">
+            <div class="sdr-agent-grid">
+              <div class="form-group">
+                <label for="sdr-agent-plan-days" class="form-label">Plan Length</label>
+                <input type="number" id="sdr-agent-plan-days" class="form-control" min="7" max="90" value="90">
+              </div>
+              <div class="form-group">
+                <label for="sdr-agent-plan-start-date" class="form-label">Start Date</label>
+                <input type="date" id="sdr-agent-plan-start-date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="sdr-agent-plan-time" class="form-label">Posting Time</label>
+                <input type="time" id="sdr-agent-plan-time" class="form-control" value="09:00">
+              </div>
+            </div>
+            <label class="checkbox-group">
+              <input type="checkbox" id="sdr-agent-plan-replace" class="checkbox-input" checked>
+              <span class="checkbox-label">Replace this agent's existing pending plan posts</span>
+            </label>
+            <div class="sdr-agent-search-preset-actions">
+              <button type="button" id="sdr-agent-plan-generate" class="btn btn-primary">Generate &amp; Schedule Plan</button>
+            </div>
+          </div>
+          <div id="sdr-agent-content-plan-summary" class="sdr-agent-content-plan-summary">
+            <div class="hint-text">Select an SDR agent with a LinkedIn account to build a scheduled 90-day post queue.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Intelligence -->
+    <aside class="sdr-panel-right">
+      <!-- Ranked Prospects -->
+      <div class="sdr-intel-section">
+        <div class="sdr-intel-header">
+          <h2 class="sdr-panel-title">Ranked Prospects</h2>
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">analytics</span>
+        </div>
+        <div class="sdr-prospect-controls">
+          <select id="sdr-prospect-sort" class="form-control">
+            <option value="score">Highest Score</option>
+            <option value="recent">Recent Activity</option>
+            <option value="reply">Latest Reply</option>
+          </select>
+        </div>
+        <div id="sdr-prospect-list-meta" class="sdr-intel-meta">Select an agent to view scored prospects.</div>
+        <div id="sdr-prospect-list" class="sdr-prospect-list"></div>
+      </div>
+
+      <!-- Recent Workflow Runs -->
+      <div class="sdr-intel-section">
+        <div class="sdr-intel-header">
+          <h2 class="sdr-panel-title">Recent Workflows</h2>
+          <span class="material-symbols-outlined" style="font-size:18px;color:var(--on-surface-variant)">history</span>
+        </div>
+        <div id="sdr-workflow-run-list" class="sdr-run-list"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+  <!-- Message scheduler styles moved to app.css -->
+  
+  <section id="message-scheduler-section" class="app-section">
+  <!-- Message Scheduler Section -->
+  <div class="message-scheduler-section">
+    <h3 class="section-title">Message Scheduler</h3>
+    
+    <!-- Message Composer -->
+    <div class="message-composer">
+      <h4>Compose Message</h4>
+      
+      <!-- Template Selector -->
+      <div class="message-template-selector">
+        <div class="template-chip active" data-template="custom">Custom</div>
+        <div class="template-chip" data-template="followup">Follow-up</div>
+        <div class="template-chip" data-template="introduction">Introduction</div>
+        <div class="template-chip" data-template="invitation">Event Invitation</div>
+        <div class="template-chip" data-template="thank-you">Thank You</div>
+      </div>
+      
+      <!-- Message Input -->
+      <textarea id="message-content" class="message-textarea" placeholder="Type your message here...">Hi {firstName},
+  I hope this message finds you well. I noticed your experience in {title} at {company} and wanted to reach out.
+  Best regards</textarea>
+      
+      <!-- Variable Tags -->
+      <div class="message-variables">
+        <div class="variable-tag" data-variable="{firstName}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          First Name
+        </div>
+        <div class="variable-tag" data-variable="{lastName}">Last Name</div>
+        <div class="variable-tag" data-variable="{fullName}">Full Name</div>
+        <div class="variable-tag" data-variable="{company}">Company</div>
+        <div class="variable-tag" data-variable="{title}">Job Title</div>
+      </div>
+    </div>
+    
+    <!-- Schedule Controls -->
+    <div class="schedule-controls">
+      <div class="schedule-option selected" data-schedule="immediate">
+        <div class="schedule-option-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Send Now
+        </div>
+        <div class="schedule-option-description">Send messages immediately</div>
+      </div>
+      
+      <div class="schedule-option" data-schedule="scheduled">
+        <div class="schedule-option-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Schedule for Later
+        </div>
+        <div class="schedule-option-description">Set a specific date and time</div>
+      </div>
+    </div>
+    
+    <!-- DateTime Inputs (hidden by default) -->
+    <div class="datetime-inputs" id="datetime-inputs" style="display: none;">
+      <input type="date" id="schedule-date" class="datetime-input">
+      <input type="time" id="schedule-time" class="datetime-input">
+      
+      <!-- Recurring Options -->
+      <div class="recurring-options">
+        <label class="checkbox-container">
+          <input type="checkbox" id="recurring-message">
+          <span>Make this a recurring message</span>
+        </label>
+        
+        <div class="recurring-pattern" id="recurring-pattern" style="display: none;">
+          <div class="pattern-option selected" data-pattern="daily">Daily</div>
+          <div class="pattern-option" data-pattern="weekly">Weekly</div>
+          <div class="pattern-option" data-pattern="monthly">Monthly</div>
+          
+          <input type="number" id="recurrence-count" class="datetime-input" placeholder="Number of times" min="1" max="30" value="1" style="width: 150px;">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recipient Selector -->
+    <div class="recipient-selector">
+      <h4>Select Recipients</h4>
+      
+      <div class="recipient-tabs">
+        <button class="recipient-tab active" data-tab="profiles">Individual Profiles</button>
+        <button class="recipient-tab" data-tab="groups">Groups</button>
+        <button class="recipient-tab" data-tab="workflows">Workflow Results</button>
+        <button class="recipient-tab" data-tab="filters">Smart Filters</button>
+      </div>
+      
+      <!-- Profiles Tab -->
+      <div class="recipient-content" id="profiles-recipients">
+        <input type="text" placeholder="Search profiles..." class="form-control" style="margin-bottom: 10px;">
+        
+        <div class="recipient-list" id="profile-recipient-list">
+          <!-- Dynamically populated -->
+        </div>
+        
+        <div class="selected-count">
+          <strong id="selected-profiles-count">0</strong> profiles selected
+        </div>
+      </div>
+      
+      <!-- Groups Tab -->
+      <div class="recipient-content" id="groups-recipients" style="display: none;">
+        <select id="group-selector" class="form-control">
+          <option value="">Select a group...</option>
+        </select>
+        
+        <div class="selected-count" style="margin-top: 10px;">
+          <strong id="selected-group-count">0</strong> members in selected group
+        </div>
+      </div>
+      
+      <!-- Workflows Tab -->
+      <div class="recipient-content" id="workflows-recipients" style="display: none;">
+        <select id="workflow-selector" class="form-control">
+          <option value="">Select a workflow...</option>
+        </select>
+        
+        <div class="selected-count" style="margin-top: 10px;">
+          <strong id="selected-workflow-count">0</strong> profiles from workflow
+        </div>
+      </div>
+      
+      <!-- Smart Filters Tab -->
+      <div class="recipient-content" id="filters-recipients" style="display: none;">
+        <div class="filter-options">
+          <label class="form-label">Filter by interaction type:</label>
+          <div class="checkbox-group">
+            <input type="checkbox" id="filter-viewed" value="viewed">
+            <label for="filter-viewed">Viewed profiles</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="filter-connected" value="connected">
+            <label for="filter-connected">Sent connection request</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="filter-liked" value="liked">
+            <label for="filter-liked">Liked posts</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="filter-no-message" value="no-message">
+            <label for="filter-no-message">Never messaged</label>
+          </div>
+        </div>
+        
+        <button class="btn btn-secondary" style="margin-top: 10px;" onclick="applySmartFilters()">Apply Filters</button>
+        
+        <div class="selected-count" style="margin-top: 10px;">
+          <strong id="filtered-count">0</strong> profiles match filters
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="btn-group" style="margin-top: 20px;">
+      <button id="preview-messages-btn" class="btn btn-secondary">Preview Messages</button>
+      <button id="schedule-messages-btn" class="btn btn-primary">Schedule Messages</button>
+      <button id="send-now-button" class="btn btn-primary js-legacy-direct-login" title="Legacy direct-login send-now. Set CONNECT_ALLOW_LEGACY_DIRECT_LOGIN=renderer-ui to show this control.">Send Now</button>
+    </div>
+  </div>
+  
+  <!-- Scheduled Messages List -->
+  <div class="scheduled-messages-list">
+    <h4>Scheduled Messages</h4>
+    
+    <div id="scheduled-messages-container">
+      <!-- Dynamically populated -->
+    </div>
+  </div>
+  
+  <!-- Message Preview Modal -->
+  <div class="message-preview-modal" id="message-preview-modal">
+    <div class="preview-header">
+      <h3 class="preview-title">Message Preview</h3>
+      <button class="preview-close" onclick="closePreviewModal()">&times;</button>
+    </div>
+    
+    <div class="preview-content" id="preview-content">
+      <!-- Dynamically populated -->
+    </div>
+    
+    <div style="padding: 20px; border-top: 1px solid #dce0e6;">
+      <button class="btn btn-primary" style="width: 100%;" onclick="confirmSchedule()">Confirm & Schedule</button>
+    </div>
+  </div>
+  
+  <script>
+  // Message Scheduler JavaScript
+  let schedulerProfiles = [];
+  let schedulerWorkflows = [];
+  let smartFilterResults = [];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize message scheduler
+    initializeMessageScheduler();
+    
+    // Fix the Send Now button handler
+    const sendNowButton = document.getElementById('send-now-button');
+    const scheduleButton = document.getElementById('schedule-messages-btn');
+    
+    if (sendNowButton) {
+      sendNowButton.addEventListener('click', function() {
+        handleSendNow();
+      });
+    }
+    
+    // Also update the schedule button to handle both cases
+    if (scheduleButton) {
+      scheduleButton.addEventListener('click', function() {
+        const scheduleType = document.querySelector('.schedule-option.selected')?.dataset.schedule;
+        if (scheduleType === 'immediate') {
+          handleSendNow();
+        } else {
+          scheduleMessages();
+        }
+      });
+    }
+  });
+  
+  function initializeMessageScheduler() {
+    // Template selector
+    document.querySelectorAll('.template-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.template-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        loadMessageTemplate(this.dataset.template);
+      });
+    });
+    
+    // Variable tags
+    document.querySelectorAll('.variable-tag').forEach(tag => {
+      tag.addEventListener('click', function() {
+        insertVariable(this.dataset.variable);
+      });
+    });
+    
+    // Schedule options
+    document.querySelectorAll('.schedule-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.schedule-option').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        const dateTimeInputs = document.getElementById('datetime-inputs');
+        if (this.dataset.schedule === 'scheduled') {
+          dateTimeInputs.style.display = 'block';
+          setDefaultDateTime();
+        } else {
+          dateTimeInputs.style.display = 'none';
+        }
+      });
+    });
+    
+    // Recurring checkbox
+    document.getElementById('recurring-message').addEventListener('change', function() {
+      document.getElementById('recurring-pattern').style.display = this.checked ? 'flex' : 'none';
+    });
+    
+    // Pattern options
+    document.querySelectorAll('.pattern-option').forEach(option => {
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.pattern-option').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+    
+    // Recipient tabs
+    document.querySelectorAll('.recipient-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.recipient-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Hide all content
+        document.querySelectorAll('.recipient-content').forEach(content => {
+          content.style.display = 'none';
+        });
+        
+        // Show selected content
+        document.getElementById(`${this.dataset.tab}-recipients`).style.display = 'block';
+        
+        // Load content
+        loadRecipientContent(this.dataset.tab);
+      });
+    });
+    
+    // Preview button
+    document.getElementById('preview-messages-btn').addEventListener('click', previewMessages);
+    
+    // Load initial data
+    loadProfiles();
+    loadGroups();
+    loadWorkflows();
+    loadScheduledMessages();
+
+    document.addEventListener('connect-ability:active-linkedin-account-changed', () => {
+      loadProfiles();
+      loadWorkflows();
+      loadScheduledMessages();
+    });
+  }
+  
+  function loadMessageTemplate(template) {
+    const templates = {
+      custom: `Hi {firstName},\n\nI hope this message finds you well. I noticed your experience in {title} at {company} and wanted to reach out.\n\nBest regards`,
+      followup: `Hi {firstName},\n\nI wanted to follow up on our previous conversation. Hope you're doing well!\n\nWould love to continue our discussion when you have time.\n\nBest regards`,
+      introduction: `Hi {firstName},\n\nI came across your profile and was impressed by your work at {company}. I'd love to connect and learn more about your experience in {title}.\n\nLooking forward to connecting!\n\nBest regards`,
+      invitation: `Hi {firstName},\n\nI wanted to personally invite you to [Event Name] happening on [Date]. Given your expertise in {title}, I think you'd find it valuable.\n\nLet me know if you're interested!\n\nBest regards`,
+      'thank-you': `Hi {firstName},\n\nThank you for connecting! I really appreciate you taking the time.\n\nI look forward to staying in touch and learning from your experience at {company}.\n\nBest regards`
+    };
+    
+    document.getElementById('message-content').value = templates[template] || templates.custom;
+  }
+  
+  function insertVariable(variable) {
+    const textarea = document.getElementById('message-content');
+    const cursorPos = textarea.selectionStart;
+    const textBefore = textarea.value.substring(0, cursorPos);
+    const textAfter = textarea.value.substring(cursorPos);
+    
+    textarea.value = textBefore + variable + textAfter;
+    textarea.focus();
+    textarea.setSelectionRange(cursorPos + variable.length, cursorPos + variable.length);
+  }
+  
+  function setDefaultDateTime() {
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    
+    const dateInput = document.getElementById('schedule-date');
+    const timeInput = document.getElementById('schedule-time');
+    
+    dateInput.value = now.toISOString().split('T')[0];
+    timeInput.value = now.toTimeString().slice(0, 5);
+  }
+
+  function getActiveLinkedInSchedulerAccount() {
+    return window.LinkedInAccountContext?.getActiveAccount?.() || null;
+  }
+
+  function getActiveLinkedInSchedulerAccountId() {
+    return window.LinkedInAccountContext?.getActiveAccountId?.()
+      || getActiveLinkedInSchedulerAccount()?.id
+      || null;
+  }
+  
+  function loadProfiles() {
+    return window.electronAPI.getAllProfiles().then(profiles => {
+      schedulerProfiles = Array.isArray(profiles) ? profiles : [];
+      const container = document.getElementById('profile-recipient-list');
+      container.innerHTML = '';
+      
+      schedulerProfiles.forEach(profile => {
+        const item = document.createElement('div');
+        item.className = 'recipient-item';
+        item.innerHTML = `
+          <input type="checkbox" class="recipient-checkbox" data-profile-id="${profile.url}">
+          <div class="recipient-info">
+            <div class="recipient-name">${profile.firstName} ${profile.lastName}</div>
+            <div class="recipient-details">${profile.title || ''} at ${profile.company || ''}</div>
+          </div>
+        `;
+        
+        item.addEventListener('click', function(e) {
+          if (e.target.type !== 'checkbox') {
+            const checkbox = this.querySelector('.recipient-checkbox');
+            checkbox.checked = !checkbox.checked;
+          }
+          this.classList.toggle('selected');
+          updateSelectedCount();
+        });
+        
+        container.appendChild(item);
+      });
+    });
+  }
+  
+  function loadGroups() {
+    const groups = JSON.parse(localStorage.getItem('standalone-groups') || '[]');
+    const selector = document.getElementById('group-selector');
+    selector.innerHTML = '<option value="">Select a group...</option>';
+    
+    groups.forEach(group => {
+      const option = document.createElement('option');
+      option.value = group.id;
+      option.textContent = `${group.name} (${group.members?.length || 0} members)`;
+      selector.appendChild(option);
+    });
+    
+    selector.onchange = function() {
+      const selected = groups.find(g => g.id === this.value);
+      document.getElementById('selected-group-count').textContent = selected?.members?.length || 0;
+    };
+  }
+  
+  function loadWorkflows() {
+    return window.electronAPI.getAllWorkflows().then(workflows => {
+      schedulerWorkflows = Array.isArray(workflows) ? workflows : [];
+      const selector = document.getElementById('workflow-selector');
+      selector.innerHTML = '<option value="">Select a workflow...</option>';
+      
+      schedulerWorkflows.forEach(workflow => {
+        const option = document.createElement('option');
+        option.value = workflow.id;
+        option.textContent = `${workflow.name} (${workflow.profileIds?.length || 0} profiles)`;
+        selector.appendChild(option);
+      });
+      
+      selector.onchange = function() {
+        const selected = schedulerWorkflows.find(w => w.id === this.value);
+        document.getElementById('selected-workflow-count').textContent = selected?.profileIds?.length || 0;
+      };
+    });
+  }
+  
+  function loadRecipientContent(tab) {
+    switch(tab) {
+      case 'profiles':
+        loadProfiles();
+        break;
+      case 'groups':
+        loadGroups();
+        break;
+      case 'workflows':
+        loadWorkflows();
+        break;
+      case 'filters':
+        // Filters are already loaded
+        break;
+    }
+  }
+  
+  function updateSelectedCount() {
+    const checked = document.querySelectorAll('.recipient-checkbox:checked').length;
+    document.getElementById('selected-profiles-count').textContent = checked;
+  }
+  
+  function applySmartFilters() {
+    const filters = {
+      viewed: document.getElementById('filter-viewed').checked,
+      connected: document.getElementById('filter-connected').checked,
+      liked: document.getElementById('filter-liked').checked,
+      noMessage: document.getElementById('filter-no-message').checked
+    };
+    
+    window.electronAPI.getAllProfiles().then(profiles => {
+      const filtered = profiles.filter(profile => {
+        const actions = Array.isArray(profile.actions) ? profile.actions : [];
+        if (filters.viewed && !actions.some(a => a.type === 'Profile Viewed')) return false;
+        if (filters.connected && !actions.some(a => a.type === 'Connection Request Sent')) return false;
+        if (filters.liked && !actions.some(a => a.type === 'Post Liked')) return false;
+        if (filters.noMessage && actions.some(a => a.type === 'Message Sent')) return false;
+        return true;
+      });
+      
+      smartFilterResults = filtered;
+      document.getElementById('filtered-count').textContent = filtered.length;
+    });
+  }
+  
+  function getSelectedRecipients() {
+    const activeTab = document.querySelector('.recipient-tab.active').dataset.tab;
+    
+    switch(activeTab) {
+      case 'profiles':
+        return Array.from(document.querySelectorAll('.recipient-checkbox:checked'))
+          .map(cb => cb.dataset.profileId);
+      
+      case 'groups':
+        const groupId = document.getElementById('group-selector').value;
+        const groups = JSON.parse(localStorage.getItem('standalone-groups') || '[]');
+        const group = groups.find(g => g.id === groupId);
+        return group?.members || [];
+      
+      case 'workflows':
+        const workflowId = document.getElementById('workflow-selector').value;
+        return (schedulerWorkflows.find(w => w.id === workflowId)?.profileIds || []).slice();
+      
+      case 'filters':
+        return smartFilterResults.map(profile => profile.url);
+      
+      default:
+        return [];
+    }
+  }
+  
+  function previewMessages() {
+    const recipients = getSelectedRecipients();
+    const messageTemplate = document.getElementById('message-content').value;
+    
+    if (recipients.length === 0) {
+      alert('Please select at least one recipient');
+      return;
+    }
+    
+    const modal = document.getElementById('message-preview-modal');
+    const content = document.getElementById('preview-content');
+    
+    content.innerHTML = '';
+    
+    window.electronAPI.getAllProfiles().then(profiles => {
+      const selectedProfiles = profiles.filter(p => recipients.includes(p.url)).slice(0, 5);
+      
+      selectedProfiles.forEach(profile => {
+        const personalizedMessage = messageTemplate
+          .replace(/{firstName}/g, profile.firstName || 'there')
+          .replace(/{lastName}/g, profile.lastName || '')
+          .replace(/{fullName}/g, `${profile.firstName} ${profile.lastName}`.trim() || 'there')
+          .replace(/{company}/g, profile.company || 'your company')
+          .replace(/{title}/g, profile.title || 'your role');
+        
+        const preview = document.createElement('div');
+        preview.className = 'preview-message';
+        preview.innerHTML = `
+          <div class="preview-recipient">To: ${profile.firstName} ${profile.lastName}</div>
+          <div class="preview-text">${personalizedMessage.replace(/\n/g, '<br>')}</div>
+        `;
+        content.appendChild(preview);
+      });
+      
+      if (recipients.length > 5) {
+        content.innerHTML += `<div style="text-align: center; padding: 10px; color: #666;">...and ${recipients.length - 5} more recipients</div>`;
+      }
+    });
+    
+    modal.classList.add('active');
+  }
+  
+  function closePreviewModal() {
+    document.getElementById('message-preview-modal').classList.remove('active');
+  }
+  
+  function confirmSchedule() {
+    closePreviewModal();
+    scheduleMessages();
+  }
+  
+  function scheduleMessages() {
+    const recipients = getSelectedRecipients();
+    const messageTemplate = document.getElementById('message-content').value;
+    const scheduleType = document.querySelector('.schedule-option.selected').dataset.schedule;
+    const activeLinkedInAccount = getActiveLinkedInSchedulerAccount();
+    
+    if (recipients.length === 0) {
+      alert('Please select at least one recipient');
+      return;
+    }
+    
+    if (!messageTemplate.trim()) {
+      alert('Please enter a message');
+      return;
+    }
+    
+    const messageData = {
+      accountId: activeLinkedInAccount?.id || null,
+      accountName: activeLinkedInAccount?.name || activeLinkedInAccount?.email || null,
+      profileIds: recipients,
+      message: messageTemplate,
+      scheduledTime: scheduleType === 'immediate' ? new Date().toISOString() : getScheduledDateTime(),
+      recurring: document.getElementById('recurring-message')?.checked || false,
+      recurringPattern: document.querySelector('.pattern-option.selected')?.dataset.pattern || null,
+      maxRecurrences: parseInt(document.getElementById('recurrence-count')?.value) || 1,
+      options: {
+        accountId: activeLinkedInAccount?.id || null,
+        accountName: activeLinkedInAccount?.name || activeLinkedInAccount?.email || null,
+        recurring: document.getElementById('recurring-message')?.checked || false,
+        recurringPattern: document.querySelector('.pattern-option.selected')?.dataset.pattern || null,
+        maxRecurrences: parseInt(document.getElementById('recurrence-count')?.value) || 1
+      }
+    };
+    
+    window.electronAPI.scheduleMessage(messageData).then((result) => {
+      if (!result?.ok) {
+        alert(result?.error || 'Failed to schedule messages');
+        return;
+      }
+
+      showNotification(`Message scheduled for ${recipients.length} recipients`, 'success');
+      renderScheduledMessages(result.messages || []);
+    }).catch((error) => {
+      alert(error?.message || 'Failed to schedule messages');
+    });
+  }
+  
+  function handleSendNow() {
+    console.log('=== SEND NOW CLICKED ===');
+    
+    const recipients = getSelectedRecipients();
+    const messageTemplate = document.getElementById('message-content').value;
+    const activeLinkedInAccount = getActiveLinkedInSchedulerAccount();
+    
+    if (!recipients || recipients.length === 0) {
+      alert('Please select at least one recipient');
+      return;
+    }
+    
+    if (!messageTemplate || messageTemplate.trim() === '') {
+      alert('Please enter a message');
+      return;
+    }
+    
+    console.log('Recipients:', recipients);
+    console.log('Message:', messageTemplate);
+    
+    const messageConfig = {
+      accountId: activeLinkedInAccount?.id || null,
+      accountName: activeLinkedInAccount?.name || activeLinkedInAccount?.email || null,
+      profileIds: recipients,
+      message: messageTemplate,
+      sendNow: true
+    };
+    
+    if (window.electronAPI && window.electronAPI.send) {
+      console.log('Sending message config to main process:', messageConfig);
+      window.electronAPI.send('send-messages-now', messageConfig);
+      
+      showNotification('Preparing to send messages...', 'info');
+    } else {
+      console.error('electronAPI not available');
+      alert('Error: Unable to communicate with the application. Please restart the app.');
+    }
+  }
+  
+  function getScheduledDateTime() {
+    const date = document.getElementById('schedule-date').value;
+    const time = document.getElementById('schedule-time').value;
+    
+    if (!date || !time) {
+      return new Date().toISOString();
+    }
+    
+    return new Date(`${date}T${time}`).toISOString();
+  }
+  
+  function loadScheduledMessages() {
+    return window.electronAPI.getScheduledMessages({
+      accountId: getActiveLinkedInSchedulerAccountId()
+    }).then((result) => {
+      renderScheduledMessages(result?.messages || []);
+    }).catch(() => {
+      renderScheduledMessages([]);
+    });
+  }
+  
+  function cancelScheduledMessage(scheduleId) {
+    if (confirm('Are you sure you want to cancel this scheduled message?')) {
+      window.electronAPI.cancelScheduledMessage(scheduleId, {
+        accountId: getActiveLinkedInSchedulerAccountId()
+      }).then((result) => {
+        renderScheduledMessages(result?.messages || []);
+      }).catch((error) => {
+        showNotification(error?.message || 'Failed to cancel scheduled message', 'error');
+      });
+    }
+  }
+  
+  function editScheduledMessage(scheduleId) {
+    window.electronAPI.send('get-scheduled-message', scheduleId);
+  }
+  
+  function showNotification(message, type = 'info') {
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 5000);
+  }
+
+  function getScheduledMessageDateLabel(schedule) {
+    const scheduledTime = new Date(schedule?.scheduledTime || '');
+    if (Number.isNaN(scheduledTime.getTime())) {
+      return 'Date unavailable';
+    }
+    return `${scheduledTime.toLocaleDateString()} at ${scheduledTime.toLocaleTimeString()}`;
+  }
+
+  function renderScheduledMessages(messages) {
+    const container = document.getElementById('scheduled-messages-container');
+    container.innerHTML = '';
+
+    if (!messages || messages.length === 0) {
+      container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No scheduled messages</div>';
+      return;
+    }
+
+    messages.forEach(schedule => {
+      const item = document.createElement('div');
+      item.className = 'scheduled-message-item';
+
+      const status = getScheduleStatus(schedule);
+      const recipientIds = Array.isArray(schedule.profileIds) ? schedule.profileIds : (schedule.profileUrls || []);
+      const recurring = schedule.recurring ?? schedule.options?.recurring ?? false;
+      const recurringPattern = schedule.recurringPattern ?? schedule.options?.recurringPattern ?? null;
+      const currentRecurrence = schedule.currentRecurrence ?? 0;
+      const maxRecurrences = schedule.maxRecurrences ?? schedule.options?.maxRecurrences ?? 1;
+      const scheduleAccountLabel = schedule.accountName || schedule.options?.accountName || 'Default profile';
+
+      item.innerHTML = `
+        <div class="scheduled-message-info">
+          <div class="scheduled-message-time">
+            ${getScheduledMessageDateLabel(schedule)}
+            <span style="margin-left: 10px; padding: 2px 8px; background: ${getStatusColor(status)}; color: white; border-radius: 4px; font-size: 11px;">
+              ${status}
+            </span>
+          </div>
+          <div class="scheduled-message-recipients">
+            ${recipientIds.length} recipients
+            ${recurring ? `• Recurring ${recurringPattern} (${currentRecurrence}/${maxRecurrences})` : ''}
+            • ${scheduleAccountLabel}
+          </div>
+          <div class="scheduled-message-preview">
+            "${schedule.message.substring(0, 100)}${schedule.message.length > 100 ? '...' : ''}"
+          </div>
+        </div>
+        <div class="scheduled-message-actions">
+          ${schedule.status === 'pending' ? `
+            <button class="message-action-btn edit" onclick="editScheduledMessage('${schedule.id}')">Edit</button>
+            <button class="message-action-btn cancel" onclick="cancelScheduledMessage('${schedule.id}')">Cancel</button>
+          ` : ''}
+        </div>
+      `;
+
+      container.appendChild(item);
+    });
+  }
+  
+  // Listen for responses from the main process
+  if (window.electronAPI && window.electronAPI.on) {
+    window.electronAPI.on('message-progress', (data) => {
+      console.log('Message progress:', data);
+      if (data.status === 'completed') {
+        showNotification(`Successfully sent messages! Sent: ${data.results.sent}, Failed: ${data.results.failed}`, 'success');
+      } else if (data.status === 'error') {
+        showNotification(`Error: ${data.error}`, 'error');
+      }
+    });
+    
+    window.electronAPI.on('automation-log', (data) => {
+      if (data.message.includes('Starting to send messages')) {
+        showNotification(data.message, 'info');
+      } else if (data.message.includes('Message sent to')) {
+        console.log('Progress:', data.message);
+      } else if (data.message.includes('Failed') || data.type === 'error') {
+        console.error('Error:', data.message);
+        if (data.message.includes('No recipients') || data.message.includes('No message')) {
+          showNotification(data.message, 'error');
+        }
+      }
+    });
+  }
+  
+  // Listen for scheduled messages from backend
+  window.electronAPI.on('scheduled-messages-loaded', (messages) => {
+    renderScheduledMessages(messages);
+  });
+  
+	  function getScheduleStatus(schedule) {
+	    if (schedule.status === 'completed' || schedule.status === 'sent') return 'Sent';
+	    if (schedule.status === 'failed') return 'Failed';
+	    if (schedule.status === 'cancelled') return 'Cancelled';
+	    if (schedule.status === 'running' || schedule.status === 'executing') return 'Sending...';
+    
+    const now = new Date();
+    const scheduledTime = new Date(schedule.scheduledTime);
+    if (!Number.isNaN(scheduledTime.getTime()) && scheduledTime > now) return 'Scheduled';
+    return 'Pending';
+  }
+  
+  function getStatusColor(status) {
+    switch(status) {
+      case 'Sent': return '#28a745';
+      case 'Failed': return '#dc3545';
+      case 'Cancelled': return '#6c757d';
+      case 'Sending...': return '#ffc107';
+      case 'Scheduled': return '#007bff';
+      default: return '#17a2b8';
+    }
+  }
+  </script>
+  </section>
+        
+        <!-- Profiles Section -->
+<!-- Profiles Section --> 
+<section id="profiles-section" class="app-section">   
+  <div class="card">
+    <div class="card-header">       
+      <h2 class="card-title">Profile Management</h2>       
+      <div class="search-actions">         
+        <div class="search-box">           
+          <input type="text" id="profile-search" class="form-control" placeholder="Search profiles...">         
+        </div>         
+        <button id="create-workflow-from-profiles" class="btn btn-primary btn-sm">Create Workflow</button>       
+      </div>     
+    </div>     
+    <div class="card-body">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="profiles-tab">Profiles</button>
+        <button class="tab-button" data-tab="groups-tab">Groups</button>
+      </div>
+
+      <!-- Profiles Tab Content -->
+      <div id="profiles-tab" class="tab-content active">
+        <!-- Filter container -->       
+        <div id="profile-filter-container" class="profile-filter-container">         
+          <button id="filter-profiles-dropdown" class="filter-dropdown-btn">           
+            <span>Filter Profiles</span>           
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"                 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">             
+              <polyline points="6 9 12 15 18 9"></polyline>           
+            </svg>         
+          </button>         
+          <!-- The dropdown menu will be injected/updated here by JS -->         
+          <div id="profile-filter-dropdown" class="filter-dropdown-menu" style="display: none;"></div>       
+        </div>        
+        
+        <div class="filter-toolbar">         
+          <!-- Your existing filter toolbar if any -->       
+        </div>              
+        
+        <div class="profiles-list" id="profiles-list">         
+          <div class="empty-state">           
+            <p>No profiles found. Start automation to build your profile database.</p>         
+          </div>
+          <!-- Profile items will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Groups Tab Content -->
+      <div id="groups-tab" class="tab-content">
+        <div class="groups-actions">
+          <button id="create-group-btn" class="btn btn-secondary btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Create Group
+          </button>
+        </div>
+        
+        <div class="groups-list" id="groups-list">
+          <div class="empty-state">
+            <p>No groups created yet. Create a group to organize your profiles.</p>
+          </div>
+          <!-- Group items will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group Creation Modal -->
+  <div class="modal" id="group-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Group</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="group-form">
+          <div class="form-group">
+            <label for="group-name" class="form-label">Group Name</label>
+            <input type="text" id="group-name" class="form-control" placeholder="e.g., Marketing Leads">
+          </div>
+          <div class="form-group">
+            <label for="group-description" class="form-label">Description (Optional)</label>
+            <textarea id="group-description" class="form-control" placeholder="Brief description of this group"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Group Color</label>
+            <div class="color-options">
+              <div class="color-option" data-color="#4285F4"></div>
+              <div class="color-option" data-color="#34A853"></div>
+              <div class="color-option" data-color="#FBBC05"></div>
+              <div class="color-option" data-color="#EA4335"></div>
+              <div class="color-option" data-color="#9C27B0"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Add Profiles</label>
+            <div class="checkbox-group">
+              <input type="checkbox" id="add-profiles-now" class="checkbox-input">
+              <label for="add-profiles-now" class="checkbox-label">Add profiles now</label>
+            </div>
+            <div id="group-profiles-selection" style="display: none;">
+              <div class="search-box">
+                <input type="text" id="group-profile-search" class="form-control" placeholder="Search profiles to add...">
+              </div>
+              <div class="selectable-profiles-list" id="selectable-profiles-list">
+                <!-- Profile selection will be loaded here -->
+                <div class="empty-state">
+                  <p>No profiles available to add.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-group" class="btn btn-secondary">Cancel</button>
+        <button id="save-group" class="btn btn-primary">Create Group</button>
+      </div>
+    </div>
+  </div>
+</section>
+        
+        <!-- Settings Section -->
+        <section id="settings-section" class="app-section">
+          <div class="card" style="max-width:720px;margin:0 auto">
+            <div class="card-header">
+              <h2 class="card-title"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:4px">settings</span> Application Settings</h2>
+            </div>
+            <div class="card-body">
+              <form id="settings-form">
+                <div class="form-group">
+                  <label class="form-label">Appearance</label>
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="dark-mode" class="checkbox-input">
+                    <label for="dark-mode" class="checkbox-label">Dark Mode (Coming Soon)</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Automation Behavior</label>
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="auto-retry" class="checkbox-input" checked>
+                    <label for="auto-retry" class="checkbox-label">Auto-retry on failures</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="save-screenshots" class="checkbox-input">
+                    <label for="save-screenshots" class="checkbox-label">Save screenshots</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="delay-min" class="form-label">Delay Between Profiles (seconds)</label>
+                  <div class="range-slider">
+                    <div class="range-values">
+                      <span id="delay-min-value">45</span> - <span id="delay-max-value">90</span>
+                    </div>
+                    <div class="range-inputs">
+                      <input type="range" id="delay-min" class="range-input" min="10" max="120" value="45">
+                      <input type="range" id="delay-max" class="range-input" min="20" max="300" value="90">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="data-dir" class="form-label">Data Directory</label>
+                  <div class="input-with-button">
+                    <input type="text" id="data-dir" class="form-control" readonly>
+                    <button type="button" id="choose-dir" class="btn btn-secondary">Browse</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Workflow Settings</label>
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="enable-workflow-manager" class="checkbox-input" checked>
+                    <label for="enable-workflow-manager" class="checkbox-label">Enable Workflow Manager</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" id="auto-run-workflows" class="checkbox-input">
+                    <label for="auto-run-workflows" class="checkbox-label">Auto-run new workflows</label>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" id="save-settings" class="btn btn-primary">Save Settings</button>
+                  <button type="button" id="reset-settings" class="btn btn-secondary">Reset to Default</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+        
+        
+        <!-- Credentials Section -->
+        <section id="credentials-section" class="app-section">
+          <div class="cred-triple-panel">
+            <!-- LEFT: Account List -->
+            <aside class="cred-panel-left">
+              <div class="sdr-panel-header">
+                <h2 class="sdr-panel-title">LinkedIn Manager</h2>
+              </div>
+              <div class="cred-account-selector">
+                <label for="credentials-account-select" class="form-label">Working Profile</label>
+                <select id="credentials-account-select" class="form-control">
+                  <option value="">No saved profiles</option>
+                </select>
+              </div>
+              <div id="linkedin-account-list" class="linkedin-account-list">
+                <div class="inbox-empty">No LinkedIn profiles saved.</div>
+              </div>
+              <div class="cred-left-footer">
+                <button type="button" id="new-linkedin-profile" class="btn btn-secondary" style="width:100%">
+                  <span class="material-symbols-outlined" style="font-size:16px">add</span> Connect Account
+                </button>
+              </div>
+            </aside>
+
+            <!-- CENTER: Account Configuration -->
+            <section class="cred-panel-center">
+              <div class="cred-section-header">
+                <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">shield_person</span>
+                <h1 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--primary)">Account Configuration</h1>
+              </div>
+
+              <div class="card" style="margin-bottom:24px">
+                <div class="card-header">
+                  <h2 class="card-title"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:4px">badge</span> Account Specifics</h2>
+                </div>
+                <div class="card-body">
+                  <form id="credentials-form">
+                    <input type="hidden" id="linkedin-account-id">
+                    <div class="sdr-agent-grid">
+                      <div class="form-group">
+                        <label for="linkedin-account-name" class="form-label">Profile Name</label>
+                        <input type="text" id="linkedin-account-name" class="form-control" placeholder="Founder account">
+                      </div>
+                      <div class="form-group">
+                        <label for="linkedin-email" class="form-label">Login Identifier</label>
+                        <input type="email" id="linkedin-email" class="form-control" placeholder="your.email@example.com">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="linkedin-password" class="form-label">Password</label>
+                      <div class="password-input">
+                        <input type="password" id="linkedin-password" class="form-control" placeholder="Your password">
+                        <button type="button" id="toggle-password" class="toggle-password">
+                          <span class="material-symbols-outlined" style="font-size:18px">visibility</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="cred-note">
+                      <span class="material-symbols-outlined" style="font-size:16px;color:var(--on-surface-variant)">info</span>
+                      <p>The selected active profile is reused by Search &amp; Engage, Automations, schedulers, messaging, and posting.</p>
+                    </div>
+                    <div class="btn-group" style="margin-top:20px">
+                      <button type="button" id="save-credentials-btn" class="btn btn-primary">Save Profile</button>
+                      <button type="button" id="clear-credentials" class="btn btn-secondary">Delete Selected</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Apollo Integration -->
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:4px">api</span> Apollo Sync Status</h2>
+                </div>
+                <div class="card-body">
+                  <div id="apollo-status-card" class="apollo-status-card">
+                    <div class="inbox-empty">Apollo integration status will appear here once loaded.</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- RIGHT: Health Monitor -->
+            <aside class="cred-panel-right">
+              <div class="sdr-intel-header" style="margin-bottom:16px">
+                <h2 class="sdr-panel-title">Session Health</h2>
+                <span class="material-symbols-outlined" style="font-size:18px;color:var(--primary)">monitor_heart</span>
+              </div>
+              <div class="cred-health-dial">
+                <div class="cred-health-value">--</div>
+                <div class="cred-health-label">Loading...</div>
+              </div>
+              <div class="cred-diagnostics" style="margin-top:24px">
+                <button class="btn btn-secondary" style="width:100%;margin-bottom:8px">
+                  <span class="material-symbols-outlined" style="font-size:14px">download</span> Export Session Logs
+                </button>
+                <button class="btn btn-secondary" style="width:100%;margin-bottom:8px">
+                  <span class="material-symbols-outlined" style="font-size:14px">refresh</span> Refresh Session
+                </button>
+                <button class="btn btn-secondary" style="width:100%">
+                  <span class="material-symbols-outlined" style="font-size:14px">verified_user</span> Verify Auth State
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Simple fix for group selection dropdown
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a moment for everything to load
+  setTimeout(function() {
+    // Force refresh the groups from localStorage
+    const groups = JSON.parse(localStorage.getItem('standalone-groups') || '[]');
+    console.log("Found groups:", groups);
+    
+    // Get the select element
+    const groupSelect = document.getElementById('automation-group-select');
+    if (!groupSelect) {
+      console.error("Group select element not found");
+      return;
+    }
+    
+    // Clear existing options
+    groupSelect.innerHTML = '';
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'All Profiles';
+    defaultOption.selected = true;
+    groupSelect.appendChild(defaultOption);
+    
+    // Add groups as options
+    if (groups && groups.length > 0) {
+      groups.forEach(group => {
+        const option = document.createElement('option');
+        option.value = group.id;
+        option.textContent = `${group.name} (${group.members?.length || 0} profiles)`;
+        groupSelect.appendChild(option);
+      });
+      console.log(`Added ${groups.length} groups to dropdown`);
+    } else {
+      console.warn("No groups found in localStorage");
+    }
+    
+    // Apply some additional styling to make sure it's visible
+    if (groupSelect.parentElement) {
+      groupSelect.style.display = 'block';
+      groupSelect.style.width = '100%';
+      groupSelect.style.padding = '8px';
+      groupSelect.style.border = '1px solid #dce0e6';
+      groupSelect.style.borderRadius = '4px';
+      groupSelect.style.backgroundColor = 'white';
+    }
+  }, 1000); // Wait 1 second to ensure everything is loaded
+});
+  </script>
+
+<script src="profiles.js"></script>
+<script src="groups-module.js"></script>
+<script src="agent-message-defaults.js"></script>
+<script  src="app.js"></script>
+<script src="sdr-agents.js"></script>
+<script src="automations-builder.js"></script>
+
+  <script>
+    // Cockpit greeting + placeholder sparklines. Greeting updates on hour;
+    // sparklines render once as subtle decoration and can be swapped for
+    // real data by a later updateKpiSparklines() pass.
+    (function () {
+      var greetingEl = document.getElementById('cockpit-greeting');
+      if (greetingEl) {
+        var hour = new Date().getHours();
+        var g = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+        greetingEl.textContent = g + '.';
+      }
+      var sparkSlots = document.querySelectorAll('#dashboard-section .kpi-spark-slot');
+      function spark(points, color) {
+        var w = 200, h = 28, max = Math.max.apply(null, points), min = Math.min.apply(null, points), range = max - min || 1;
+        var pts = points.map(function (v, i) {
+          var x = (i / (points.length - 1)) * w;
+          var y = h - ((v - min) / range) * (h - 4) - 2;
+          return [x, y];
+        });
+        var d = pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+        var area = d + ' L' + w + ',' + h + ' L0,' + h + ' Z';
+        var id = 'sg' + Math.random().toString(36).slice(2, 8);
+        return '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" preserveAspectRatio="none" style="display:block"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + color + '" stop-opacity="0.22"/><stop offset="100%" stop-color="' + color + '" stop-opacity="0"/></linearGradient></defs><path d="' + area + '" fill="url(#' + id + ')"/><path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="' + pts[pts.length-1][0].toFixed(1) + '" cy="' + pts[pts.length-1][1].toFixed(1) + '" r="2" fill="' + color + '"/></svg>';
+      }
+      var demoSeries = [
+        [8,10,9,12,11,14,13,15,16,14,17,19],
+        [5,6,7,6,8,9,8,10,11,10,12,13],
+        [28,30,29,31,30,32,31,30,29,30,32,31],
+        [11,12,13,12,14,13,14,15,14,15,16,14],
+        [2,3,2,4,3,5,4,6,5,7,9,12]
+      ];
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var primaryHex = isDark ? '#6fa4ff' : '#1b4da8';
+      var dangerHex  = isDark ? '#ef6b6b' : '#c2292a';
+      sparkSlots.forEach(function (el, i) {
+        var isAccent = el.parentElement && el.parentElement.classList.contains('metric-card-accent');
+        var color = isAccent ? dangerHex : primaryHex;
+        el.innerHTML = spark(demoSeries[i] || demoSeries[0], color);
+      });
+
+      // Cockpit status line — populated once at load; can be re-set later
+      // by updateActivityOverview(stats) with real counts.
+      var statusLine = document.getElementById('cockpit-status-line');
+      if (statusLine) statusLine.textContent = 'Ready';
+    })();
+  </script>
+
+  <script>
+    // Theme toggle — persists to localStorage and swaps the icon.
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      var icon = btn.querySelector('.theme-toggle-icon');
+      function currentTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      }
+      function renderIcon() {
+        if (!icon) return;
+        icon.textContent = currentTheme() === 'dark' ? 'light_mode' : 'dark_mode';
+      }
+      renderIcon();
+      btn.addEventListener('click', function () {
+        var next = currentTheme() === 'dark' ? 'light' : 'dark';
+        if (next === 'light') {
+          document.documentElement.removeAttribute('data-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        try { localStorage.setItem('connect-theme', next); } catch (e) {}
+        renderIcon();
+      });
+    })();
+  </script>
+</body>
+</html>

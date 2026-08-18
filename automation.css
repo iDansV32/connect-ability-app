@@ -1,0 +1,479 @@
+/* 
+  Updated CSS scoped to #automation-section 
+  so it doesn't affect other elements.
+*/
+
+/* Scope the fade-in animation exclusively to automation section */
+#automation-section {
+    animation: fadeInAutomation 0.4s ease-in-out;
+  }
+  
+  /* Renamed keyframes to avoid global collision */
+  @keyframes fadeInAutomation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Specific selectors targeting the automation section only */
+  #automation-section .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.3s ease;
+    margin-bottom: 32px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+  
+  #automation-section .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  #automation-section .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+  }
+  
+  #automation-section .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  #automation-section .card-title svg {
+    margin-right: 8px;
+    color: #0a66c2;
+  }
+  
+  #automation-section .card-body {
+    padding: 32px;
+  }
+  
+  /* Form elements */
+  #automation-section .form-group {
+    margin-bottom: 32px;
+  }
+  
+  #automation-section .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #334155;
+    font-size: 16px;
+  }
+  
+  #automation-section .section-label {
+    font-size: 18px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    color: #1e293b;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 8px;
+  }
+  
+  #automation-section .form-control {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: white;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  #automation-section .form-control:focus {
+    outline: none;
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.15);
+  }
+  
+  #automation-section .form-control::placeholder {
+    color: #94a3b8;
+  }
+  
+  /* Hint text */
+  #automation-section .hint-text {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+  
+  /* Checkbox and radio styling */
+  #automation-section .checkbox-group,
+  #automation-section .radio-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+  }
+  
+  #automation-section .checkbox-input,
+  #automation-section .radio-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  #automation-section .checkbox-label,
+  #automation-section .radio-label {
+    font-size: 16px;
+    color: #334155;
+    user-select: none;
+  }
+  
+  #automation-section .checkbox-label:before,
+  #automation-section .radio-label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #94a3b8;
+    background-color: white;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  #automation-section .checkbox-label:before {
+    border-radius: 4px;
+  }
+  
+  #automation-section .radio-label:before {
+    border-radius: 50%;
+  }
+  
+  #automation-section .checkbox-input:checked ~ .checkbox-label:before {
+    background-color: #0a66c2;
+    border-color: #0a66c2;
+  }
+  
+  #automation-section .radio-input:checked ~ .radio-label:before {
+    border-color: #0a66c2;
+    border-width: 5px;
+  }
+  
+  #automation-section .checkbox-input:checked ~ .checkbox-label:after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Engagement Options */
+  #automation-section .engagement-options {
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border-left: 3px solid #0a66c2;
+  }
+  
+  /* Slide down animation scoped to automation section */
+  @keyframes slideDownAutomation {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Connection options */
+  #automation-section .connection-options {
+    margin-top: 16px;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #0a66c2;
+    transition: all 0.3s ease;
+    animation: slideDownAutomation 0.3s ease-in-out;
+  }
+  
+  /* Textarea */
+  #automation-section textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  /* Variable buttons */
+  #automation-section .variable-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  
+  #automation-section .variable-btn {
+    background-color: #e8f1fa;
+    color: #0a66c2;
+    border: 1px solid #0a66c2;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  #automation-section .variable-btn:hover {
+    background-color: #0a66c2;
+    color: white;
+  }
+  
+  /* Variable hints */
+  #automation-section .message-format-hint {
+    background-color: #e8f1fa;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+  
+  #automation-section .message-format-hint h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #0a66c2;
+  }
+  
+  #automation-section .message-format-hint ul {
+    margin: 0;
+    padding-left: 24px;
+    font-size: 14px;
+  }
+  
+  #automation-section .message-format-hint li {
+    margin-bottom: 4px;
+  }
+  
+  #automation-section .variable-tag {
+    background-color: #e8f1fa;
+    color: #0a66c2;
+    padding: 2px 6px;
+    margin: 0 2px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  /* Terminal styling */
+  #automation-section .terminal {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 32px;
+    font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+  }
+  
+  #automation-section .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #1e293b;
+    border-bottom: 1px solid #334155;
+  }
+  
+  #automation-section .terminal-title {
+    font-size: 14px;
+    color: #cbd5e1;
+  }
+  
+  #automation-section .terminal-controls {
+    display: flex;
+    gap: 6px;
+  }
+  
+  #automation-section .terminal-control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  
+  #automation-section .terminal-control.red {
+    background-color: #ff5f56;
+  }
+  
+  #automation-section .terminal-control.yellow {
+    background-color: #ffbd2e;
+  }
+  
+  #automation-section .terminal-control.green {
+    background-color: #27c93f;
+  }
+  
+  #automation-section .terminal-content {
+    padding: 16px;
+    height: 300px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  #automation-section .log-entry {
+    margin-bottom: 8px;
+    display: flex;
+  }
+  
+  #automation-section .log-time {
+    color: #94a3b8;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  
+  #automation-section .log-message {
+    color: #e2e8f0;
+    word-break: break-word;
+  }
+  
+  #automation-section .log-message.info {
+    color: #4ec9b0;
+  }
+  
+  #automation-section .log-message.error {
+    color: #e25950;
+  }
+  
+  #automation-section .log-message.warning {
+    color: #dcdcaa;
+  }
+  
+  #automation-section .log-message.success {
+    color: #24b47e;
+  }
+  
+  /* Button styling */
+  #automation-section .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  #automation-section .btn:focus {
+    outline: none;
+  }
+  
+  #automation-section .btn-primary {
+    background-color: #0a66c2;
+    color: white;
+    border-color: #004182;
+  }
+  
+  #automation-section .btn-primary:hover {
+    background-color: #004182;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  #automation-section .btn-secondary {
+    background-color: white;
+    color: #334155;
+    border-color: #cbd5e1;
+  }
+  
+  #automation-section .btn-secondary:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  #automation-section .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  #automation-section .btn-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  /* Progress container */
+  #automation-section .progress-container {
+    margin-top: 32px;
+    animation: fadeInAutomation 0.5s ease-in-out;
+  }
+  
+  #automation-section .progress-bar {
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  
+  #automation-section .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0a66c2, #24b47e);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  
+  #automation-section .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #475569;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    #automation-section .card-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    #automation-section .btn-group {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    #automation-section .btn {
+      width: 100%;
+    }
+    
+    #automation-section .progress-stats {
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+  

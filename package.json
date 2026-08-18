@@ -1,0 +1,125 @@
+{
+  "name": "connect-ability",
+  "productName": "Connect Ability",
+  "version": "1.0.0",
+  "description": "LinkedIn Automation Tool with human-like interaction",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env NODE_ENV=development electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "deploy:mac": "electron-builder --mac && rm -rf '/Applications/Connect Ability.app' && cp -R 'dist/mac-arm64/Connect Ability.app' '/Applications/Connect Ability.app' && echo '✅ Deployed to /Applications'",
+    "smoke:mac": "node scripts/smoke-installed-app.js",
+    "release:check:mac": "npm test && node scripts/smoke-installed-app.js",
+    "rebuild:electron": "electron-builder install-app-deps",
+    "rebuild:node": "node scripts/run-node-backend.js --prepare-only",
+    "test": "node scripts/run-node-backend.js -- --require ./tests/setup-no-network.js --test tests/*.test.js",
+    "test:live": "node scripts/run-node-backend.js -- --test tests-live/*.test.js",
+    "postinstall": "electron-builder install-app-deps",
+    "openclaw:export-schema": "node openclaw-integration/export-connect-schema.js",
+    "openclaw:slack-example": "node openclaw-integration/slack-claw-handler.example.js",
+    "mcp:server": "node scripts/run-node-backend.js -- connect-mcp-server.js",
+    "mcp:http": "node scripts/run-node-backend.js -- connect-mcp-server.js --http-only",
+    "mcp:http:3030": "CONNECT_API_PORT=3030 node scripts/run-node-backend.js -- connect-mcp-server.js --http-only --port 3030",
+    "mcp:stdio": "node scripts/run-node-backend.js -- connect-mcp-server.js --stdio-only"
+  },
+  "keywords": [
+    "linkedin",
+    "automation",
+    "networking",
+    "marketing"
+  ],
+  "author": "Ivan Dans",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=24.0.0 <25.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "better-sqlite3": "^12.8.0",
+    "chromium": "^3.0.3",
+    "dotenv": "^16.0.3",
+    "electron-updater": "^6.8.3",
+    "keytar": "^7.9.0",
+    "playwright": "1.60.0",
+    "tesseract.js": "^7.0.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^40.10.2",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.ivandans.connectability",
+    "productName": "Connect Ability",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist{,/**/*}",
+      "!release{,/**/*}",
+      "!screenshots{,/**/*}",
+      "!tests{,/**/*}",
+      "!tests-live{,/**/*}",
+      "!*.md",
+      "!openclaw-integration{,/**/*}",
+      "!scripts/smoke-*.js",
+      "!scripts/probe-*.js",
+      "!scripts/validate-*.js",
+      "!**/*.log",
+      "!**/*.zip",
+      "!**/*.dmg",
+      "!**/*.exe",
+      "!**/*.blockmap",
+      "!**/.env",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/.{idea,git,vscode,DS_Store}",
+      "!**/._*",
+      "!**/{.gitignore,.eslintrc.json,.prettierrc}"
+    ],
+    "asarUnpack": [
+      "node_modules/keytar/**",
+      "node_modules/better-sqlite3/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.business"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "assets/icon.png",
+      "category": "Network;Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}

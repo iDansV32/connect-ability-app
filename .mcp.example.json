@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy to .mcp.json and edit the paths to match your machine. The .mcp.json file is gitignored.",
+  "mcpServers": {
+    "connect-ability": {
+      "command": "node",
+      "args": ["./scripts/run-node-backend.js", "--", "./connect-mcp-server.js", "--stdio-only"],
+      "env": {
+        "CONNECT_STDIO_PLATFORM_WRITES": "1"
+      }
+    }
+  }
+}
